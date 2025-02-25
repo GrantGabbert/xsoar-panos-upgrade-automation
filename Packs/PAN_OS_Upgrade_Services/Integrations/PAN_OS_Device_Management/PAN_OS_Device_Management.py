@@ -1,28 +1,75 @@
-import demistomock as demisto
-from CommonServerPython import *
+import demistomock as demisto  # noqa: F401
+from CommonServerPython import *  # noqa: F401
 
 import requests
-from typing import List, Union, Optional
+from typing import List
+import time, hashlib, urllib.parse, random, string
 
-from dataclasses import dataclass
-from panos.panorama import Panorama, DeviceGroup, Template
-from panos.policies import Rulebase, PreRulebase, PostRulebase, SecurityRule, NatRule
+from panos.panorama import Panorama
 from panos.firewall import Firewall
-from panos.network import Zone
-from panos.device import Vsys
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlunparse
+import xml.etree.ElementTree as ET
 
 # Disable insecure warnings
 requests.packages.urllib3.disable_warnings()
 
-ISSUE_INDICATOR_TYPE = "Network Configuration Issue"
+class Client(BaseClient):
+    """Client class to interact with the service API
 
+    From Cortex XDR - XQL Query integration
+
+    This Client implements API calls, and does not contain any XSOAR logic.
+    Should only do requests and return data.
+    It inherits from BaseClient defined in CommonServer Python.
+    Most calls use _http_request() that handles proxy, SSL verification, etc.
+    For this  implementation, no special attributes defined
+    """
+
+    def add_xql_lookup_data(self, data: dict) -> dict:
+        res = self._http_request(method='POST', url_suffix='/xql/lookups/add_data', json_data=data)
+        return res
+    def remove_xql_lookup_data(self, data: dict) -> dict:
+        res = self._http_request(method='POST', url_suffix='/xql/lookups/remove_data', json_data=data)
+        return res
+    def get_xql_lookup_data(self, data: dict) -> dict:
+        res = self._http_request(method='POST', url_suffix='/xql/lookups/get_data', json_data=data)
+        return res
+    def add_dataset(self, data: dict) -> dict:
+        res = self._http_request(method='POST', url_suffix='/xql/add_dataset', json_data=data)
+        return res
+    def delete_dataset(self, data: dict) -> dict:
+        res = self._http_request(method='POST', url_suffix='/xql/delete_dataset/', json_data=data)
+        return res
+    def get_datasets(self, data: dict) -> dict:
+        res = self._http_request(method='POST', url_suffix='/xql/get_datasets', json_data=data)
+        return res
+
+def get_standard_auth_headers(key:str, auth_id:str) -> dict:
+    return {
+                'Authorization': key,
+                'x-xdr-auth-id': auth_id,
+                'Accept': 'application/json'
+            }
+
+def get_adv_auth_headers(key:str, auth_id:str) -> dict:
+    nonce = ''.join(random.choices(string.ascii_lowercase + string.digits, k=64))
+    timestamp = str(int(time.time() * 1000))
+    auth_key = key + nonce + timestamp
+    auth_key = urllib.parse.quote(auth_key, safe='')
+    auth_key_hash = hashlib.sha256(auth_key.encode()).hexdigest()
+
+    return {
+                'x-xdr-timestamp': timestamp,
+                'x-xdr-nonce': nonce,
+                'x-xdr-auth-id': auth_id,
+                'Authorization': auth_key_hash,
+                'Accept': 'application/json'
+            }
 
 class PANOSCommands:
     SHOW_SYSTEM_INFO = "show system info"
     SHOW_DEVICES_ALL = "show devices all"
     SHOW_DEVICE_GROUPS = "show devicegroups"
-
 
 class FieldMap:
     """Maps data from the PAN-OS responses into their associated indicator fields."""
@@ -38,7 +85,6 @@ class FieldMap:
     def replace(field_name):
         """Swap the name with it's mapped XSOAR name if it exists in the map"""
         return FieldMap.field_map.get(field_name, field_name)
-
 
 def flatten_xml_to_dict(element, object_dict: dict):
     """
@@ -71,7 +117,6 @@ def flatten_xml_to_dict(element, object_dict: dict):
 
     return object_dict
 
-
 def handle_ha_field(ha_settings: dict):
     """Converts the HA settings into fields objects"""
     field_data = {}
@@ -81,38 +126,32 @@ def handle_ha_field(ha_settings: dict):
         return field_data
 
     field_data["hastatus"] = ha_settings.get("state")
-    field_data["hapeerdevice"] = ha_settings.get("peer")
+    field_data["hapeerdevice"] = ha_settings.get("peer").get('serial')
     return field_data
 
-
-def system_to_indicator(data: dict) -> dict:
+def system_to_json(data: dict) -> dict:
     """
-    Convert a dictionary representation of the PAN-OS system xml, turn it into an indicator.
+    Convert a dictionary representation of the PAN-OS system xml to be added to a lookup table.
     """
-    indicator_type = "Network Device"
     family = data.get("family", "unknown").lower()
     model = data.get("model", "unknown").lower()
     system_mode = data.get("system_mode", "unknown").lower()
-    if family == "pc" or model == "panorama" or system_mode == "panorama":
-        indicator_type = "Panorama Device"
 
     field_data = {}
     # Sub out the underscores and map if required
     for field, value in data.items():
         field_name = FieldMap.replace(field.replace("_", ""))
-        field_data[field_name] = value
+        if isinstance(value, dict) or isinstance(value, list):
+            # lookup tables can't accept nested objects, to convert to json string -
+            field_data[field_name] = json.dumps(value)
+        else:
+            field_data[field_name] = value
 
     field_data = {**field_data, **handle_ha_field(data.get("ha"))}
 
     # Add model
     field_data["devicevendor"] = "Palo Alto Networks"
-    return {
-        "value": data.get("serial"),
-        "type": indicator_type,
-        "rawJSON": data,
-        "fields": field_data
-    }
-
+    return field_data
 
 def get_devicegroups(panorama: Panorama):
     """Gets the device-groups and the devices that belong to each"""
@@ -130,405 +169,175 @@ def get_devicegroups(panorama: Panorama):
 
     return device_dict
 
-
-def build_device_relationships(panorama_indicator: dict, device_indicators: List[dict]):
+def fetch_devices(panorama: Panorama, panos_instance: str) -> List[dict]:
     """
-    Relates individual firewall devices to Panorama.
+    Queries the Panorama system for managed devices and parses them. Also queries Panorama
+    itself for it's details and parses it as well.
     """
-    entity_a = panorama_indicator.get("value")
-    entity_a_type = panorama_indicator.get("type")
-    relationship_list = []
-    relationship_name = "related-to"
-    for device_indicator in device_indicators:
-        entity_b = device_indicator.get("value")
-        entity_b_type = device_indicator.get("type")
-        relationship_list.append(
-            EntityRelationship(
-                name=relationship_name,
-                entity_a=entity_a,
-                entity_a_type=entity_a_type,
-                entity_b=entity_b,
-                entity_b_type=entity_b_type
-            ).to_indicator()
-        )
-
-    return relationship_list
-
-
-def fetch_devices_as_indicators(panorama: Panorama, panos_instance: str) -> List[dict]:
-    """
-    Queries the Panorama system for managed devices and ingests them as indicators based on their type. Also queries Panorama
-    itself for it's details and ingests it as an indicator as well.
-    """
-    indicators = []
-    panorama_data = flatten_xml_to_dict(panorama.op(PANOSCommands.SHOW_SYSTEM_INFO).find("./result/system"), {})
-    panorama_data = system_to_indicator(panorama_data)
+    parsed_devices = []
+    panorama_data = flatten_xml_to_dict(panorama.op(PANOSCommands.SHOW_SYSTEM_INFO).find('./result/system'), {})
+    panorama_data = system_to_json(panorama_data)
     # Panorama device used by this integration is always considered connected
-    panorama_data["fields"]["connected"] = "yes"
+    panorama_data['connected'] = 'yes'
     # Panorama device used by this integration is always considered HA status Active
-    panorama_data["fields"]["hastatus"] = "active"
+    panorama_data['hastatus'] = 'active'
     # Also set the Panorama IP; this is used as the target for many use cases and may differ from what Panorama says is it's own
     # IP.
-    panorama_data["fields"]["panoramahostname"] = panorama.hostname
-    # Set the panos instance 
-    panorama_data["fields"]["panoramainstance"] = panos_instance
+    panorama_data['panoramahostname'] = panorama.hostname
+    # Set the panos instance
+    panorama_data['panoramainstance'] = panos_instance
 
-    devices = panorama.op(PANOSCommands.SHOW_DEVICES_ALL).findall("./result/devices/entry")
+    devices = panorama.op(PANOSCommands.SHOW_DEVICES_ALL).findall('./result/devices/entry')
     device_groups = get_devicegroups(panorama)
 
     for device in devices:
+        demisto.debug(f'Device returned from pano - {ET.tostring(device, encoding="unicode")}')
         device_data = flatten_xml_to_dict(device, {})
-        device_group = device_groups.get(device_data.get("serial"))
+        device_group = device_groups.get(device_data.get('serial'))
         # If the device is a member of a DG, then merge the fields
         if device_group:
             device_data = {**device_data, **device_group}
             # Set the tag field to the name of the DG
-            device_data["devicetags"] = [device_data.get("device_group_name")]
+            device_data['devicetags'] = [device_data.get('device_group_name')]
 
-        device_data = system_to_indicator(device_data)
-        # Set the panos instance 
-        device_data["fields"]["panoramainstance"] = panos_instance
-        indicators.append(
+        device_data = system_to_json(device_data)
+        # Set the panos instance
+        device_data['panoramainstance'] = panos_instance
+        parsed_devices.append(
             device_data
         )
 
-    relationships = build_device_relationships(panorama_data, indicators)
-    panorama_data["relationships"] = relationships
-    indicators.append(panorama_data)
-    return indicators
+    parsed_devices.append(panorama_data)
+    return parsed_devices
 
+def generate_table_schema(table_data:list) -> dict:
+    '''
+    Takes the table data and generates a schema
+    '''
+    # create a new dict with all text keys
+    all_keys = sorted({key for d in table_data for key in d})
+    schema = {key: 'text' for key in all_keys}
 
-def get_all_rules_in_container(container: Union[Panorama, Firewall, DeviceGroup, Template, Vsys],
-                               object_class: Union[SecurityRule, NatRule]):
-    """
-    Given a container (DG/template) and the class representing a type of rule object in pan-os-python, gets all the
-    associated objects and yields them as a tuple of the rulebase they belong to, and the object themselves.
+    return schema
 
-    :param container: Device group or template
-    :param object_class: The pan-os-python class of objects to retrieve
-    """
-    if object_class not in [SecurityRule, NatRule]:
-        raise ValueError(f"Given class {object_class} cannot be retrieved by this function.")
+def update_lookuptable(client:BaseClient, table_name:str, table_data: list) -> None:
+    '''
+    This will update  the firewall info lookup table
+    '''
+    # wipe existing lookup table if it exists - this is needed in case there are any differences in fields
+    query_result = client.get_datasets({'request': {}}).get('reply')
+    for dataset_info in query_result:
+        if dataset_info.get('Type') == 'LOOKUP' and dataset_info.get('Dataset Name') == table_name.lower():
+            # lookup table found, delete it
+            delete_data = {
+                # 'request': { # this doesn't match the API docs
+                    'dataset_name': table_name.lower(),
+                    'force': True
+                # }
+            }
+            delete_res = client.delete_dataset(delete_data)
 
-    firewall_rulebase = Rulebase()
-    pre_rulebase = PreRulebase()
-    post_rulebase = PostRulebase()
-    container.add(pre_rulebase)
-    container.add(post_rulebase)
-    container.add(firewall_rulebase)
-
-    for object in object_class.refreshall(firewall_rulebase):
-        yield "rulebase", object
-
-    for object in object_class.refreshall(pre_rulebase):
-        yield "pre-rulebase", object
-
-    for object in object_class.refreshall(post_rulebase):
-        yield "post-rulebase", object
-
-
-def get_all_configuration_parents(device: Union[Panorama, Firewall], name_filter: Optional[str] = ""):
-    """Gets all the configuration parents like DG, template, vsys"""
-    containers = []
-    device_groups = DeviceGroup.refreshall(device)
-    for device_group in device_groups:
-        containers.append(device_group)
-
-    templates = Template.refreshall(device)
-    for template in templates:
-        containers.append(template)
-
-    virtual_systems = Vsys.refreshall(device)
-    for virtual_system in virtual_systems:
-        containers.append(virtual_system)
-
-    if isinstance(device, Panorama):
-        # Add the "shared" device if Panorama. Firewalls will always have vsys1
-        containers.append(device)
-
-    return_containers = []
-
-    if name_filter:
-        for container in containers:
-            if name_filter == "shared":
-                if isinstance(container, Panorama):
-                    return_containers.append(container)
-            if not isinstance(container, (Panorama, Firewall)):
-                if container.name == name_filter:
-                    return_containers.append(container)
-    else:
-        return_containers = containers
-
-    return return_containers
-
-
-class IssueSubtypes:
-    VISIBILITY = "visibility"
-    THREAT = "threat"
-
-
-@dataclass
-class ConfigurationHygieneIssue:
-    """
-    :param container_name: What parent container (DG, Template, VSYS) this object belongs to.
-    :param issue_code: The shorthand code for the issue
-    :param description: Human readable description of issue
-    :param name: The affected object name
-    """
-    hostid: str
-    object_name: str
-    status: str
-
-    device_group: str = ""
-    template: str = ""
-    vsys: str = ""
-    rulebase: str = ""
-
-    issue_id: str = ""
-    description: str = ""
-
-    remediation: str = ""
-    best_practices_link: str = ""
-    issue_subtype: str = ""
-    affected_object_type: str = ""
-    panos_instance: str = ""
-
-    def as_indicator(self):
-        return {
-            "value": f"{self.hostid}_{self.issue_id}_{self.object_name}",
-            "type": ISSUE_INDICATOR_TYPE,
-            "fields": {
-                "issueaffecteddevice": self.hostid,
-                "issuedevicegroup": self.device_group,
-                "issuetemplate": self.template,
-                "issueobjectname": self.object_name,
-                "issuesubtype": self.issue_subtype,
-                "issuedescription": self.description,
-                "issueremediation": self.remediation,
-                "issuestatus": self.status,
-                "bestpracticelink": self.best_practices_link,
-                "affectedobjecttype": self.affected_object_type,
-                "issueid": self.issue_id,
-                "affectedrulebase": self.rulebase,
-                "panoramainstance": self.panos_instance
+    # create the lookup table
+    create_data = {
+            'request': {
+                'dataset_name': table_name.lower(),
+                'dataset_type': 'lookup',
+                'dataset_schema': generate_table_schema(table_data=table_data)
             }
         }
+    create_result = client.add_dataset(create_data)
 
-
-@dataclass
-class SecurityRuleNoLogAtSessionEnd(ConfigurationHygieneIssue):
-    issue_id: str = "BP-V-8"
-    description: str = """Enabling traffic logging is important for proper visibility of traffic in the environment. 
-    
-    Log at session end is recommended instead of at session start as the application used in the session may change over time.
-    """
-
-    remediation: str = """Enable Log at session end on the security rule."""
-    best_practices_link: str = "https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000Clt5CAC"
-    issue_subtype: str = IssueSubtypes.VISIBILITY
-
-
-@dataclass
-class SecurityRuleNoLogForwardingProfile(ConfigurationHygieneIssue):
-    issue_id: str = "BP-V-9"
-    description: str = """In an environment where you use multiple firewalls to control and analyze network traffic, 
-any single firewall can display logs and reports only for the traffic it monitors. 
-Because logging in to multiple firewalls can make monitoring a cumbersome task, you can more efficiently achieve global visibility 
-into network activity by forwarding the logs from all firewalls to Panorama or external services.
-
-A log forwarding profile is also mandatory to forward logs to Panorama. 
-    """
-
-    remediation: str = """Enable a log forwarding profile on the security rule."""
-    best_practices_link: str = "https://docs.paloaltonetworks.com/pan-os/10-2/pan-os-admin/monitoring/configure-log-forwarding"
-    issue_subtype: str = IssueSubtypes.VISIBILITY
-
-
-@dataclass
-class SecurityRuleNoProfiles(ConfigurationHygieneIssue):
-    issue_id: str = "BP-V-10"
-    description: str = """Security profiles enable you to inspect network traffic for threats such as vulnerability exploits, malware, command-and-control (C2) communication, and even unknown threats, and prevent them from compromising your network using various types of threat signatures.
-    """
-
-    remediation: str = """Configure a security-profile-group with valid threat protection enabled on the security rule."""
-    best_practices_link: str = "https://docs.paloaltonetworks.com/best-practices/9-1/internet-gateway-best-practices/best-practice-internet-gateway-security-policy/transition-safely-to-best-practice-security-profiles"
-    issue_subtype: str = IssueSubtypes.THREAT
-
-
-@dataclass
-class SecurityZoneNoLogSetting(ConfigurationHygieneIssue):
-    issue_id: str = "BP-V-7"
-    description: str = """Zone-Protection protects Security Zones against flood and packet based attacks.
-    
-Without log forwarding, while zone protection will still be active, the threats and traffic being dropped by the profile will not
-be visible."""
-
-    remediation: str = """Add a log forwarding profile to the security zone"""
-    best_practices_link: str = "https://docs.paloaltonetworks.com/best-practices/10-1/dos-and-zone-protection-best-practices/dos-and-zone-protection-best-practices/follow-post-deployment-dos-and-zone-protection-best-practices"
-    issue_subtype: str = IssueSubtypes.VISIBILITY
-
-
-def resolve_host_id(device):
-    """
-    Gets the ID of the host from a PanDevice object. This may be an IP address or serial number.
-    :param device: `Pandevice` object instance, can also be a `Firewall` or `Panorama` type.
-    """
-    host_id: str = ""
-    if device.hostname:
-        host_id = device.hostname
-    if device.serial:
-        host_id = device.serial
-
-    return host_id
-
-
-def resolve_parent_to_kwarg(parent):
-    if type(parent) is Panorama:
-        return {"device_group": "shared"}
-
-    map_dict = {
-        DeviceGroup: {"device_group": parent.name},
-        Template: {"template": parent.name},
-        Vsys: {"vsys": parent.name}
+    # add the fw data to the lookup table
+    add_data = {
+        "request": {
+            "dataset_name": table_name,
+            "data": table_data,
+            "key_fields": ["serial"]
+        }
     }
-    return map_dict.get(type(parent))
+    add_result = client.add_xql_lookup_data(add_data)
 
+def test_module(panorama: Panorama, xsiam_client:BaseClient) -> str:
+    '''
+    Tests this integration is configured correctly by
+        Panorama - connecting to panorama and running an op command.
+                   Also validates this is indeed connecting to Panorama,
+                   as this is required for this integration to work.
 
-def check_security_zones(device: Union[Panorama, Firewall], panos_instance: str, name_filter: Optional[str] = ""):
-    """
-    Check Palo Alto Security Zones for best practice issues
-    """
-    issue_objects = []
-    for parent in get_all_configuration_parents(device, name_filter):
-        security_zones: List[Zone] = Zone.refreshall(parent)
-        for security_zone in security_zones:
-            if not security_zone.log_setting:
-                issue_objects.append(
-                    SecurityZoneNoLogSetting(
-                        hostid=resolve_host_id(device),
-                        object_name=security_zone.name,
-                        status="unresolved",
-                        affected_object_type="SecurityZone",
-                        panos_instance=panos_instance,
-                        **resolve_parent_to_kwarg(parent)
-                    )
-                )
+        XSIAM - connects and runs the 'healthcheck' API call
 
-    return [x.as_indicator() for x in issue_objects]
-
-
-def check_security_rules(device: Union[Panorama, Firewall], panos_instance: str, name_filter: Optional[str] = ""):
-    """
-    Check Palo Alto Security rules for best practice issues.
-    """
-    issue_objects = []
-    for parent in get_all_configuration_parents(device, name_filter):
-        for rulebase, security_rule in get_all_rules_in_container(parent, SecurityRule):
-            if not security_rule.log_end:
-                issue_objects.append(
-                    SecurityRuleNoLogAtSessionEnd(
-                        hostid=resolve_host_id(device),
-                        object_name=security_rule.name,
-                        status="unresolved",
-                        affected_object_type="SecurityRule",
-                        rulebase=rulebase,
-                        panos_instance=panos_instance,
-                        **resolve_parent_to_kwarg(parent)
-                    )
-                )
-
-            if not security_rule.log_setting:
-                issue_objects.append(
-                    SecurityRuleNoLogForwardingProfile(
-                        hostid=resolve_host_id(device),
-                        object_name=security_rule.name,
-                        status="unresolved",
-                        affected_object_type="SecurityRule",
-                        rulebase=rulebase,
-                        panos_instance=panos_instance,
-                        **resolve_parent_to_kwarg(parent)
-                    )
-                )
-
-            if not any([
-                security_rule.group,
-                all(
-                    [
-                        security_rule.virus,
-                        security_rule.spyware,
-                        security_rule.vulnerability,
-                        security_rule.url_filtering,
-                    ]
-                )]
-            ):
-                issue_objects.append(
-                    SecurityRuleNoProfiles(
-                        hostid=resolve_host_id(device),
-                        object_name=security_rule.name,
-                        status="unresolved",
-                        affected_object_type="SecurityRule",
-                        rulebase=rulebase,
-                        panos_instance=panos_instance,
-                        **resolve_parent_to_kwarg(parent)
-                    )
-                )
-
-    return [x.as_indicator() for x in issue_objects]
-
-
-def fetch_configuration_hygiene_indicators(device: Union[Panorama, Firewall], panos_instance: str):
-    """
-    Runs through the series of configuration hygiene checks looking for best practice issues, and returns any that match.
-    """
-    indicators = []
-    indicators += check_security_rules(device, panos_instance)
-    indicators += check_security_zones(device, panos_instance)
-
-    return indicators
-
-
-def test_module(panorama: Panorama) -> str:
-    """Tests this integration is configured by connecting to panorama and running an op command. Also validates this is indeed
-    connecting to Panorama, as this is required for this integration to work."""
+    '''
+    panroama_pass = False
     result = panorama.op(PANOSCommands.SHOW_SYSTEM_INFO)
-    result_dict = flatten_xml_to_dict(result.find("./result/system"), {})
-    family = result_dict.get("family", "unknown").lower()
-    model = result_dict.get("model", "unknown").lower()
+    result_dict = flatten_xml_to_dict(result.find('./result/system'), {})
+    family = result_dict.get('family', 'unknown').lower()
+    model = result_dict.get('model', 'unknown').lower()
     if family == "pc" or model == "panorama":
-        return "ok"
+        panorama_pass = True
 
     if family == "m" or model in ["m-500", "m-600"]:
-        return "ok"
+        panorama_pass = True
 
-    raise ValueError(f"Incorrect model type; got family {family} and model {model} but must be panorama.")
+    if not panorama_pass:
+        raise ValueError(f"Incorrect model type; got family {family} and model {model} but must be panorama.")
 
+    try:
+        x_result = xsiam_client._http_request(method='POST', url_suffix='/public_api/v1/healthcheck')
+        if x_result.get('status') == 'available':
+            return 'ok'
+    except Exception as e:
+        return(f"Failed XSIAM API Auth --- {e}")
 
 def main():
     """Main entrypoint for script"""
+
+    # base params
     params = demisto.params()
-    api_key = str(params.get('key')) or str((params.get('credentials') or {}).get('password', ''))
+    api_key = str(params.get('credentials', {}).get('password', ''))
+    table_name = params.get('lookupTableName', 'panorama_firewall_inventory')
     parsed_url = urlparse(params.get("url"))
-    port = params.get("port", "443")
+    port = params.get('port', '443')
     hostname = parsed_url.hostname
     panos_instance = str(params.get('panosIntegrationName', ''))
 
+    # get the api xsiam url, keys and headers
+    xsiam_parsed = urlparse(demisto.demistoUrls().get('server'))
+    xsiam_parsed = xsiam_parsed._replace(netloc=f'api-{xsiam_parsed.netloc}')
+    xsiam_url = urlunparse(xsiam_parsed)
+    xsiam_key_id = str(params.get('xsiam_apikey', {}).get('identifier', ''))
+    xsiam_key = str(params.get('xsiam_apikey', {}).get('password', ''))
+
+    headers = {}
+    if params.get('auth_method') == 'Standard':
+        headers = get_standard_auth_headers(key=xsiam_key, auth_id=xsiam_key_id)
+    else:
+        headers = get_adv_auth_headers(key=xsiam_key, auth_id=xsiam_key_id)
+
     handle_proxy()
+
+    # Panorama connection
     panorama = Panorama.create_from_device(
         hostname=hostname,
         api_key=api_key,
         port=port
     )
+
+    # XSIAM client for lookup table commands
+    xsiam_client = Client(
+        base_url=xsiam_url+'/public_api/v1',
+        proxy=params.get('proxy'),
+        verify=not demisto.params().get('insecure', False),
+        headers=headers,
+        timeout=120,
+    )
+
     command_name = demisto.command()
-    if command_name == "test-module":
-        return_results(test_module(panorama))
-    elif command_name == "fetch-indicators":
-        for b in batch(fetch_devices_as_indicators(panorama, panos_instance)):
-            demisto.createIndicators(b)
-
-        if argToBoolean(params.get("fetch_panorama_hygiene_issues", False)):
-            for b in batch(fetch_configuration_hygiene_indicators(panorama, panos_instance)):
-                demisto.createIndicators(b)
-
+    if command_name == 'test-module':
+        return_results(test_module(panorama, xsiam_client))
+    elif command_name == 'fetch-indicators':
+        devices = fetch_devices(panorama, panos_instance)
+        update_lookuptable(client=xsiam_client, table_name=table_name, table_data=devices)
 
 if __name__ == "__builtin__" or __name__ == "builtins":
     main()
+

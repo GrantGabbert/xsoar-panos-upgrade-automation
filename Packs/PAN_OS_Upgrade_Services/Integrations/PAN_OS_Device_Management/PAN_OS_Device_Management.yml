@@ -1,78 +1,78 @@
+category: Network Security
 commonfields:
   id: PAN-OS Device Management
   version: -1
-vcShouldKeepItemLegacyProdMachine: false
-name: PAN-OS Device Management
-display: PAN-OS Device Management
-category: Network Security
-description: Ingests PAN-OS NGFW's connected to Panorama as XSOAR objects, and continously montior for best practice issues.
 configuration:
-- display: Server URL (e.g. https://panorama.corp.local)
+- defaultvalue: https://panorama.corp.local
+  display: Server URL (e.g., https://panorama.corp.local)
   name: url
-  defaultvalue: https://panorama.corp.local
+  required: true
+  section: Connect
   type: 0
+- display: ''
+  displaypassword: Panorama API Key
+  hiddenusername: true
+  name: credentials
   required: true
-- display: API Key
-  name: key
-  type: 4
-  required: true
-- display: Server Port
+  section: Connect
+  type: 9
+- display: Server port
   name: port
+  required: false
   type: 0
-  required: false
-  default: 443
-- display: Fetch Configuration  Issues from Panorama as Indicators
-  name: fetch_panorama_hygiene_issues
-  type: 8
-  required: false
-- display: Trust any certificate (not secure)
+- advanced: true
+  display: Trust any certificate (not secure)
   name: insecure
-  type: 8
   required: false
-- display: Use system proxy settings
+  section: Connect
+  type: 8
+- advanced: true
+  display: Use system proxy settings
   name: proxy
-  type: 8
   required: false
+  section: Connect
+  type: 8
+- additionalinfo: Specify the integration instance name here to correctly set the using parameter
+  display: PAN-OS Integration Name
+  name: panosIntegrationName
+  required: true
+  type: 0
+- additionalinfo: The lookup table to store the firewall data, default is panorama_firewall_inventory
+  defaultvalue: panorama_firewall_inventory
+  display: Lookup Table Name
+  name: lookupTableName
+  required: false
+  type: 0
 - display: Fetch indicators
   name: feed
+  required: false
   type: 8
-  required: false
-- display: ""
-  name: feedExpirationPolicy
-  defaultvalue: indicatorType
-  type: 17
-  required: false
-  options:
-  - never
-  - interval
-  - indicatorType
-  - suddenDeath
-- display: ""
-  name: feedExpirationInterval
-  defaultvalue: "20160"
-  type: 1
-  required: false
-- display: Feed Fetch Interval
+- defaultvalue: '240'
+  display: Feed Fetch Interval
   name: feedFetchInterval
-  defaultvalue: "240"
+  required: false
   type: 19
+- display: XSIAM API Key ID
+  displaypassword: XSIAM API Key
+  name: xsiam_apikey
   required: false
-- display: Bypass exclusion list
-  name: feedBypassExclusionList
-  type: 8
+  type: 9
+- additionalinfo: Whether authentication should be using "Standard" API key or "Advanced" API key
+  display: XSIAM API Auth method
+  name: auth_method
+  options:
+  - Standard
+  - Advanced
   required: false
-  additionalinfo: When selected, the exclusion list is ignored for indicators from
-    this feed. This means that if an indicator from this feed is on the exclusion
-    list, the indicator might still be added to the system.
-- display: PAN-OS Integration Name
-  name: panosIntegrationName
-  type: 0
-  required: true
-  additionalinfo: Specify the integration instance name here to correctly set the 
-    using parameter
+  type: 15
+description: "Ingests PAN-OS NGFW's connected to Panorama into a lookup table in XSIAM.\n\nThis uses the fetch indicators polling mechanism to create the lookup table, but does not fetch any indicators.\n\nIn order to update lookup tables, this integration also requires an XSIAM API key and key ID"
+display: PAN-OS Device Management
+name: PAN-OS Device Management
 script:
-  type: python
-  dockerimage: demisto/pan-os-python:1.0.0.30307
+  dockerimage: demisto/pan-os-python:1.0.0.117206
   feed: true
+  isFetchSamples: true
   runonce: false
+  script: ''
   subtype: python3
+  type: python
