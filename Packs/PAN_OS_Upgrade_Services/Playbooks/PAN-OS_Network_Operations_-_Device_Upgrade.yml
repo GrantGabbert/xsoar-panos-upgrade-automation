@@ -1,5 +1,14 @@
 description: Upgrades a single or HA pair of PAN-OS firewalls.
+dirtyInputs: true
 id: PAN-OS Network Operations - Device Upgrade
+inputSections:
+- description: Generic group for inputs
+  inputs:
+  - target_device
+  - peer_device
+  - target_version
+  - panorama_instance
+  name: General (Inputs group)
 inputs:
 - description: Target Firewall for upgrade
   key: target_device
@@ -19,7 +28,17 @@ inputs:
   required: false
   value:
     simple: ${incident.panosnetworkoperationsupgradetargetversion}
+- description: Instance name for Panorama Integration to use
+  key: panorama_instance
+  playbookInputQuery: null
+  required: false
+  value:
+    simple: ${incident.panosnetworkoperationspanoramainstancename}
 name: PAN-OS Network Operations - Device Upgrade
+outputSections:
+- description: Generic group for outputs
+  name: General (Outputs group)
+  outputs: []
 outputs: []
 starttaskid: "0"
 tasks:
@@ -49,7 +68,7 @@ tasks:
       {
         "position": {
           "x": 520,
-          "y": -3250
+          "y": -3070
         }
       }
   "40":
@@ -218,7 +237,7 @@ tasks:
       wait: 1
     nexttasks:
       '#none#':
-      - "62"
+      - "68"
     note: false
     quietmode: 0
     scriptarguments:
@@ -270,7 +289,7 @@ tasks:
       {
         "position": {
           "x": 520,
-          "y": -1370
+          "y": -1170
         }
       }
   "62":
@@ -293,28 +312,32 @@ tasks:
     scriptarguments:
       peer_device:
         simple: ${incident.panosnetworkoperationsupgradepeerfirewall}
+      reset_ha_topology:
+        simple: "true"
       target_device:
-        simple: ${incident.panosnetworkoperationstarget}
+        simple: ${inputs.target_device}
       target_version:
         simple: ${incident.upgradepath}
     separatecontext: true
     skipunavailable: false
     task:
       brand: ""
-      id: e0c5f1f3-dfea-4556-8ce3-11740cbda7de
+      description: Upgrades a single or HA pair of PAN-OS firewalls, supports running
+        as a subplaybook and be looped over to complete an entire upgrade path.
+      id: 50dc3546-d006-401d-8d15-2784e25adb2e
       iscommand: false
       name: PAN-OS Network Operations - Device Upgrade Loop
       playbookId: PAN-OS Network Operations - Device Upgrade Loop
       type: playbook
       version: -1
-    taskid: e0c5f1f3-dfea-4556-8ce3-11740cbda7de
+    taskid: 50dc3546-d006-401d-8d15-2784e25adb2e
     timertriggers: []
     type: playbook
     view: |-
       {
         "position": {
           "x": 520,
-          "y": -1550
+          "y": -1330
         }
       }
   "63":
@@ -370,12 +393,14 @@ tasks:
       - "59"
     note: false
     quietmode: 0
+    scriptarguments:
+      instance:
+        simple: ${inputs.panorama_instance}
     separatecontext: false
     skipunavailable: false
     task:
       brand: ""
-      description: 'This will set the Panorama instance field (panosnetworkoperationspanoramainstance)
-        if it isn''t already set.  '
+      description: "This will set the Panorama instance field (panosnetworkoperationspanoramainstance) if it isn't already set.  "
       id: d9814a7d-ab6a-4a7d-8a00-4835e6f58a06
       iscommand: false
       name: Set Panorama Instance
@@ -392,16 +417,88 @@ tasks:
           "y": -1930
         }
       }
-version: 8
+  "68":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              simple: incident.upgradepath
+          operator: isNotEmpty
+      label: yes
+    continueonerrortype: ""
+    id: "68"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "69"
+      yes:
+      - "62"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: c85aeeab-1823-426f-8828-c8303f531d6b
+      iscommand: false
+      name: Is upgrade path set?
+      type: condition
+      version: -1
+    taskid: c85aeeab-1823-426f-8828-c8303f531d6b
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 520,
+          "y": -1540
+        }
+      }
+  "69":
+    continueonerrortype: ""
+    id: "69"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    scriptarguments:
+      message:
+        simple: No upgradepath set, make sure to select an higher PAN-OS version than the target firewall; or if you are upgrading a partially upgraded HA pair, target firewall with the lower version.
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Prints an error entry with a given message
+      id: 340aeda1-f805-49e6-80ef-dd86d0fbf796
+      iscommand: false
+      name: No Upgrade Path Found.
+      script: PrintErrorEntry
+      type: regular
+      version: -1
+    taskid: 340aeda1-f805-49e6-80ef-dd86d0fbf796
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 980,
+          "y": -1330
+        }
+      }
+version: 11
 view: |-
   {
     "linkLabelsPosition": {},
     "paper": {
       "dimensions": {
-        "height": 1945,
-        "width": 610,
+        "height": 1965,
+        "width": 840,
         "x": 520,
-        "y": -3250
+        "y": -3070
       }
     }
   }

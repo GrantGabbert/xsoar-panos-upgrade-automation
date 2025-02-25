@@ -45,10 +45,10 @@
 							},
 							{
 								"endCol": 2,
-								"fieldId": "panosnetworkoperationsupgradetargetfirewallversion",
+								"fieldId": "panosnetworkoperationsupgradetargetversion",
 								"height": 53,
-								"id": "cfd99ad0-ea3e-11ed-939f-4f8b882605d4",
-								"index": 1,
+								"id": "ab0ddd00-74e5-11ef-9a5f-8578e5a6051d",
+								"index": 2,
 								"sectionItemType": "field",
 								"startCol": 0
 							}
@@ -136,6 +136,27 @@
 							{
 								"endCol": 2,
 								"fieldId": "minimumcontentversion",
+								"filters": [
+									[
+										{
+											"ignoreCase": false,
+											"left": {
+												"isContext": true,
+												"value": {
+													"simple": "readinesschecklist"
+												}
+											},
+											"operator": "containsGeneral",
+											"right": {
+												"isContext": false,
+												"value": {
+													"simple": "content_version"
+												}
+											},
+											"type": "multiSelect"
+										}
+									]
+								],
 								"height": 53,
 								"id": "79972af0-ea40-11ed-939f-4f8b882605d4",
 								"index": 1,
@@ -145,6 +166,27 @@
 							{
 								"endCol": 2,
 								"fieldId": "checksessionexists",
+								"filters": [
+									[
+										{
+											"ignoreCase": false,
+											"left": {
+												"isContext": true,
+												"value": {
+													"simple": "readinesschecklist"
+												}
+											},
+											"operator": "containsGeneral",
+											"right": {
+												"isContext": false,
+												"value": {
+													"simple": "session_exist"
+												}
+											},
+											"type": "multiSelect"
+										}
+									]
+								],
 								"height": 53,
 								"id": "694a9300-3c96-11ee-a0fd-e5af4a0a9390",
 								"index": 2,
@@ -154,9 +196,90 @@
 							{
 								"endCol": 2,
 								"fieldId": "checkarpentryexists",
-								"height": 22,
+								"filters": [
+									[
+										{
+											"ignoreCase": false,
+											"left": {
+												"isContext": true,
+												"value": {
+													"simple": "readinesschecklist"
+												}
+											},
+											"operator": "containsGeneral",
+											"right": {
+												"isContext": false,
+												"value": {
+													"simple": "arp"
+												}
+											},
+											"type": "multiSelect"
+										}
+									]
+								],
+								"height": 53,
 								"id": "6b700b10-3c96-11ee-a0fd-e5af4a0a9390",
 								"index": 3,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "ipsectunnel",
+								"filters": [
+									[
+										{
+											"ignoreCase": false,
+											"left": {
+												"isContext": true,
+												"value": {
+													"simple": "readinesschecklist"
+												}
+											},
+											"operator": "containsGeneral",
+											"right": {
+												"isContext": false,
+												"value": {
+													"simple": "ipsec_tunnel"
+												}
+											},
+											"type": "multiSelect"
+										}
+									]
+								],
+								"height": 53,
+								"id": "3aa90820-66d8-11ef-bcde-9775318adc09",
+								"index": 4,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "dpmpclockdiff",
+								"filters": [
+									[
+										{
+											"ignoreCase": false,
+											"left": {
+												"isContext": true,
+												"value": {
+													"simple": "readinesschecklist"
+												}
+											},
+											"operator": "containsGeneral",
+											"right": {
+												"isContext": false,
+												"value": {
+													"simple": "dp_mp_clock_diff"
+												}
+											},
+											"type": "multiSelect"
+										}
+									]
+								],
+								"height": 53,
+								"id": "102ff380-68fc-11ef-ac49-ed13fc730685",
+								"index": 5,
 								"sectionItemType": "field",
 								"startCol": 0
 							}
@@ -168,11 +291,11 @@
 						"static": false,
 						"w": 1,
 						"x": 0,
-						"y": 4
+						"y": 2
 					},
 					{
 						"displayType": "ROW",
-						"h": 6,
+						"h": 5,
 						"hideItemTitleOnlyOne": true,
 						"hideName": false,
 						"i": "caseinfoid-740393c0-ea78-11ed-a2d2-8d604725a455",
@@ -192,13 +315,13 @@
 						"moved": false,
 						"name": "Report",
 						"static": false,
-						"w": 2,
+						"w": 1,
 						"x": 1,
 						"y": 2
 					},
 					{
 						"displayType": "ROW",
-						"h": 2,
+						"h": 1,
 						"hideName": false,
 						"i": "caseinfoid-a5b66750-eb02-11ed-bf8c-f9a66faf249a",
 						"items": [
@@ -226,8 +349,64 @@
 						"name": "Actions",
 						"static": false,
 						"w": 1,
-						"x": 0,
+						"x": 2,
 						"y": 2
+					},
+					{
+						"displayType": "CARD",
+						"h": 4,
+						"hideName": false,
+						"i": "caseinfoid-bbd7cc35-c0d2-45e9-bfcc-63ae4b4e65c5",
+						"items": [
+							{
+								"endCol": 2,
+								"fieldId": "snapshotchecklist",
+								"height": 53,
+								"id": "c78bdba1-b7f8-448c-a84a-afd947ce5e0f",
+								"index": 0,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "sessionstatschangethreshold",
+								"filters": [
+									[
+										{
+											"id": 0,
+											"ignoreCase": false,
+											"left": {
+												"isContext": true,
+												"value": {
+													"simple": "snapshotchecklist"
+												}
+											},
+											"operator": "containsGeneral",
+											"right": {
+												"isContext": false,
+												"value": {
+													"simple": "session_stats"
+												}
+											},
+											"type": "multiSelect"
+										}
+									]
+								],
+								"height": 53,
+								"id": "0313fe26-dc39-47af-a61c-1379a442dde6",
+								"index": 1,
+								"sectionItemType": "field",
+								"startCol": 0
+							}
+						],
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Assurance Snapshot Configuration",
+						"static": false,
+						"w": 1,
+						"x": 0,
+						"y": 6
 					}
 				],
 				"type": "custom"
@@ -250,17 +429,6 @@
 								"height": 106,
 								"id": "8e49c840-ea40-11ed-939f-4f8b882605d4",
 								"index": 0,
-								"sectionItemType": "field",
-								"startCol": 0
-							},
-							{
-								"dropEffect": "move",
-								"endCol": 2,
-								"fieldId": "postupgradereadinesscheckresult",
-								"height": 106,
-								"id": "457c96f0-47c0-11ee-b192-01822b22e90f",
-								"index": 1,
-								"listId": "caseinfoid-8cac1dd0-ea40-11ed-939f-4f8b882605d4",
 								"sectionItemType": "field",
 								"startCol": 0
 							}
@@ -427,7 +595,7 @@
 						"isVisible": true
 					},
 					{
-						"fieldId": "incident_panosnetworkoperationsupgradetargetfirewallversion",
+						"fieldId": "incident_panosnetworkoperationsupgradetargetversion",
 						"isVisible": true
 					},
 					{
@@ -435,7 +603,7 @@
 						"isVisible": true
 					},
 					{
-						"fieldId": "incident_panosnetworkoperationspanoramainstance",
+						"fieldId": "incident_panosnetworkoperationspanoramainstancename",
 						"isVisible": true
 					}
 				],
@@ -455,19 +623,161 @@
 					},
 					{
 						"fieldId": "incident_minimumcontentversion",
+						"filters": [
+							[
+								{
+									"left": {
+										"isContext": true,
+										"value": {
+											"simple": "readinesschecklist"
+										}
+									},
+									"operator": "containsGeneral",
+									"right": {
+										"value": {
+											"simple": "content_version"
+										}
+									},
+									"type": "multiSelect"
+								}
+							]
+						],
 						"isVisible": true
 					},
 					{
 						"fieldId": "incident_checkarpentryexists",
+						"filters": [
+							[
+								{
+									"left": {
+										"isContext": true,
+										"value": {
+											"simple": "readinesschecklist"
+										}
+									},
+									"operator": "containsGeneral",
+									"right": {
+										"value": {
+											"simple": "arp"
+										}
+									},
+									"type": "multiSelect"
+								}
+							]
+						],
 						"isVisible": true
 					},
 					{
 						"fieldId": "incident_checksessionexists",
+						"filters": [
+							[
+								{
+									"left": {
+										"isContext": true,
+										"value": {
+											"simple": "readinesschecklist"
+										}
+									},
+									"operator": "containsGeneral",
+									"right": {
+										"value": {
+											"simple": "session_exist"
+										}
+									},
+									"type": "multiSelect"
+								}
+							]
+						],
+						"isVisible": true
+					},
+					{
+						"fieldId": "incident_ipsectunnel",
+						"filters": [
+							[
+								{
+									"left": {
+										"isContext": true,
+										"value": {
+											"simple": "readinesschecklist"
+										}
+									},
+									"operator": "containsGeneral",
+									"right": {
+										"value": {
+											"simple": "ipsec_tunnel"
+										}
+									},
+									"type": "multiSelect"
+								}
+							]
+						],
+						"isVisible": true
+					},
+					{
+						"fieldId": "incident_dpmpclockdiff",
+						"filters": [
+							[
+								{
+									"left": {
+										"isContext": true,
+										"value": {
+											"simple": "readinesschecklist"
+										}
+									},
+									"operator": "containsGeneral",
+									"right": {
+										"value": {
+											"simple": "dp_mp_clock_diff"
+										}
+									},
+									"type": "multiSelect"
+								}
+							]
+						],
 						"isVisible": true
 					}
 				],
 				"isVisible": true,
 				"name": "Advanced Test Configuration",
+				"query": null,
+				"queryType": "",
+				"readOnly": false,
+				"type": ""
+			},
+			{
+				"description": "",
+				"fields": [
+					{
+						"fieldId": "incident_snapshotchecklist",
+						"isVisible": true
+					},
+					{
+						"fieldId": "incident_sessionstatschangethreshold",
+						"filters": [
+							[
+								{
+									"left": {
+										"isContext": true,
+										"value": {
+											"simple": "snapshotchecklist"
+										}
+									},
+									"operator": "containsGeneral",
+									"right": {
+										"isContext": false,
+										"value": {
+											"simple": "session_stats"
+										}
+									},
+									"type": "multiSelect"
+								}
+							]
+						],
+						"isVisible": true
+					}
+				],
+				"isVisible": true,
+				"name": "Advanced Snapshot Comparison",
 				"query": null,
 				"queryType": "",
 				"readOnly": false,
