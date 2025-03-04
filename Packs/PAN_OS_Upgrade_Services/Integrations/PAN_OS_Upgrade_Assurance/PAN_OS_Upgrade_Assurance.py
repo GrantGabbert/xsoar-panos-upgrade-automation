@@ -1,6 +1,7 @@
 import demistomock as demisto  # noqa: F401
 from CommonServerPython import *  # noqa: F401
 
+
 from typing import Optional, List
 from urllib.parse import urlparse
 
@@ -36,18 +37,6 @@ def get_firewall_object(panorama: Panorama, serial_number):
     return firewall
 
 
-def get_panorama(ip, user, password):
-    """Create the Panorama Object
-
-    NOTE: NOT IN USE.
-    """
-    return Panorama(
-        api_username=user,
-        api_password=password,
-        hostname=ip
-    )
-
-
 def parse_session(session_str: str):
     source, destination, port = session_str.split("/")
     return {
@@ -71,6 +60,7 @@ def run_snapshot(
             'content_version',
             'session_stats',
             'ip_sec_tunnels',
+            'bgp_peers'
         ]
 
     checks = CheckFirewall(firewall, **SETTINGS)
@@ -104,7 +94,6 @@ def run_readiness_checks(
         example: 10.10.10.10/8.8.8.8/443
     :arg arp_entry_exists: Check for the prescence of a specific ARP entry.
         example: 10.0.0.6
-
     """
 
     if not check_list:
@@ -209,6 +198,7 @@ def compare_snapshots(left_snapshot, right_snapshot,
             'content_version',
             'session_stats',
             'ip_sec_tunnels',
+            'bgp_peers'
         ]
 
     snapshot_comparisons = []
@@ -421,21 +411,36 @@ def command_compare_snapshots():
         outputs_prefix='FirewallAssurance'
     )
 
+def test_module(panorama: Panorama) -> str:
+    '''
+    Tests this integration is configured correctly by
+        Panorama - connecting to panorama and running an op command.
+                   Also validates this is indeed connecting to Panorama,
+                   as this is required for this integration to work.
+    '''
+    panroama_pass = False
+    result = panorama.op("show system info")
+    # just need to check the status of the API call
+    if result.attrib.get('status', '').lower() == 'success':
+        return 'ok'
+    else:
+        return f'Failed auth check, returned status {result.attrib.get("status")}'
 
 def main():
-    # copied from device mgmt...
+    # params
     params = demisto.params()
-    api_key = str(params.get('key')) or str((params.get('credentials') or {}).get('password', ''))
+    api_key = str(params.get('credentials', {}).get('password', ''))
     parsed_url = urlparse(params.get("url"))
     port = params.get("port", "443")
     hostname = parsed_url.hostname
 
-    handle_proxy()
     panorama = Panorama.create_from_device(
         hostname=hostname,
         api_key=api_key,
         port=port
     )
+
+    handle_proxy()
 
     command = demisto.command()
     try:
@@ -446,7 +451,7 @@ def main():
         elif command == "pan-os-assurance-compare-snapshots":
             return_results(command_compare_snapshots())
         elif command == "test-module":
-            return_results("ok")
+             return_results(test_module(panorama))
         else:
             return_error(f"{command} not implemented.")
     except PanDeviceXapiError as e:

@@ -4,7 +4,7 @@ commonfields:
   version: -1
 configuration:
 - defaultvalue: https://panorama.corp.local
-  display: Server URL (e.g., https://panorama.corp.local)
+  display: Panorama URL (e.g., https://panorama.corp.local)
   name: url
   required: true
   section: Connect
@@ -71,8 +71,9 @@ name: PAN-OS Device Management
 script:
   dockerimage: demisto/pan-os-python:1.0.0.117206
   feed: true
-  isFetchSamples: true
+  isFetchSamples: false
   runonce: false
   script: ''
   subtype: python3
   type: python
+vcShouldKeepItemLegacyProdMachine: false

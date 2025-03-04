@@ -43,6 +43,9 @@ class Client(BaseClient):
     def get_datasets(self, data: dict) -> dict:
         res = self._http_request(method='POST', url_suffix='/xql/get_datasets', json_data=data)
         return res
+    def healthcheck(self) -> dict:
+        res = self._http_request(method='POST', url_suffix='/healthcheck')
+        return res
 
 def get_standard_auth_headers(key:str, auth_id:str) -> dict:
     return {
@@ -282,7 +285,7 @@ def test_module(panorama: Panorama, xsiam_client:BaseClient) -> str:
         raise ValueError(f"Incorrect model type; got family {family} and model {model} but must be panorama.")
 
     try:
-        x_result = xsiam_client._http_request(method='POST', url_suffix='/public_api/v1/healthcheck')
+        x_result = xsiam_client.healthcheck()
         if x_result.get('status') == 'available':
             return 'ok'
     except Exception as e:

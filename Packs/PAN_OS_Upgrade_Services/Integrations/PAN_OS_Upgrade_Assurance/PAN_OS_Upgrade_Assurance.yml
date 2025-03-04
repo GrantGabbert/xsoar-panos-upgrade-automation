@@ -3,21 +3,24 @@ description: Operational testing for PAN-OS for PAN-OS upgrades.
 commonfields:
   id: PAN_OS_Upgrade_Assurance
   version: -1
+vcShouldKeepItemLegacyProdMachine: false
 name: PAN_OS_Upgrade_Assurance
 display: PAN-OS Assurance Testing
 configuration:
-- display: Server URL (e.g. https://panorama.corp.local)
+- display: Panorama URL (e.g., https://panorama.corp.local)
   name: url
   defaultvalue: https://panorama.corp.local
   type: 0
   required: true
-- display: API Key
-  name: key
-  type: 4
+- display: ''
+  displaypassword: Panorama API Key
+  name: credentials
+  type: 9
   required: true
+  hiddenusername: true
 - display: Server Port
   name: port
-  type: 0
+  type: 4
   required: false
   default: 443
 - display: Trust any certificate (not secure)
