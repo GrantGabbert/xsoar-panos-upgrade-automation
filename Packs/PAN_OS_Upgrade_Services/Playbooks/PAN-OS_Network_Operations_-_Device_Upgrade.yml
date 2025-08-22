@@ -1,504 +1,412 @@
-description: Upgrades a single or HA pair of PAN-OS firewalls.
-dirtyInputs: true
 id: PAN-OS Network Operations - Device Upgrade
-inputSections:
-- description: Generic group for inputs
-  inputs:
-  - target_device
-  - peer_device
-  - target_version
-  - panorama_instance
-  name: General (Inputs group)
-inputs:
-- description: Target Firewall for upgrade
-  key: target_device
-  playbookInputQuery: null
-  required: false
-  value:
-    simple: ${incident.panosnetworkoperationstarget}
-- description: Peer firewall (if any)
-  key: peer_device
-  playbookInputQuery: null
-  required: false
-  value:
-    simple: ${incident.panosnetworkoperationsupgradepeerfirewall}
-- description: Target version of upgrade
-  key: target_version
-  playbookInputQuery: null
-  required: false
-  value:
-    simple: ${incident.panosnetworkoperationsupgradetargetversion}
-- description: Instance name for Panorama Integration to use
-  key: panorama_instance
-  playbookInputQuery: null
-  required: false
-  value:
-    simple: ${incident.panosnetworkoperationspanoramainstancename}
+version: 15
+vcShouldKeepItemLegacyProdMachine: false
 name: PAN-OS Network Operations - Device Upgrade
-outputSections:
-- description: Generic group for outputs
-  name: General (Outputs group)
-  outputs: []
-outputs: []
+description: Upgrades a single or HA pair of PAN-OS firewalls.
 starttaskid: "0"
 tasks:
   "0":
-    continueonerrortype: ""
     id: "0"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
-    nexttasks:
-      '#none#':
-      - "58"
-    note: false
-    quietmode: 0
-    separatecontext: false
-    skipunavailable: false
-    task:
-      brand: ""
-      id: e25a516b-e99b-4178-8501-07cc2c986ed7
-      iscommand: false
-      name: ""
-      version: -1
-    taskid: e25a516b-e99b-4178-8501-07cc2c986ed7
-    timertriggers: []
+    taskid: a4331e6d-aa19-4373-88b5-7bf54c96bb0d
     type: start
-    view: |-
-      {
-        "position": {
-          "x": 520,
-          "y": -3070
-        }
-      }
-  "40":
-    conditions:
-    - condition:
-      - - left:
-            iscontext: true
-            value:
-              simple: incident.panosnetworkoperationsparentincidentid
-          operator: isNotEmpty
-      label: "yes"
-    continueonerrortype: ""
-    id: "40"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
-    nexttasks:
-      '#default#':
-      - "63"
-      "yes":
-      - "41"
-    note: false
-    quietmode: 0
-    separatecontext: false
-    skipunavailable: false
     task:
+      id: a4331e6d-aa19-4373-88b5-7bf54c96bb0d
+      version: -1
+      name: ""
+      iscommand: false
       brand: ""
-      description: True if this incident was created by another incident.
-      id: c8424cbe-555c-49c4-8ad0-8107267122de
-      iscommand: false
-      name: Do we have a parent incident?
-      type: condition
-      version: -1
-    taskid: c8424cbe-555c-49c4-8ad0-8107267122de
-    timertriggers: []
-    type: condition
-    view: |-
-      {
-        "position": {
-          "x": 520,
-          "y": -2550
-        }
-      }
-  "41":
-    continueonerrortype: ""
-    id: "41"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
-    nexttasks:
-      '#none#':
-      - "63"
-    note: false
-    quietmode: 0
-    scriptarguments:
-      linkedIncidentIDs:
-        simple: ${incident.panosnetworkoperationsparentincidentid}
-    separatecontext: false
-    skipunavailable: false
-    task:
-      brand: Builtin
-      description: commands.local.cmd.linkIncidents
-      id: eb7eaf31-9a3c-4677-84a1-48539b2480e5
-      iscommand: true
-      name: Link to parent
-      script: Builtin|||linkIncidents
-      type: regular
-      version: -1
-    taskid: eb7eaf31-9a3c-4677-84a1-48539b2480e5
-    timertriggers: []
-    type: regular
-    view: |-
-      {
-        "position": {
-          "x": 750,
-          "y": -2350
-        }
-      }
-  "48":
-    continueonerrortype: ""
-    id: "48"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
-    nexttasks:
-      '#none#':
-      - "40"
-    note: false
-    quietmode: 0
-    scriptarguments:
-      description:
-        simple: Awaiting Upgrade Confirmation
-      name:
-        simple: PAN-OS Upgrade - ${inputs.target_device}
-      severity:
-        simple: "0.5"
-    separatecontext: false
-    skipunavailable: false
-    task:
-      brand: Builtin
-      description: commands.local.cmd.set.incident
-      id: 96adcd0d-353a-4ad0-8338-0a762a71ca31
-      iscommand: true
-      name: Set Status
-      script: Builtin|||setIncident
-      type: regular
-      version: -1
-    taskid: 96adcd0d-353a-4ad0-8338-0a762a71ca31
-    timertriggers: []
-    type: regular
-    view: |-
-      {
-        "position": {
-          "x": 520,
-          "y": -2755
-        }
-      }
-  "58":
-    continueonerrortype: ""
-    id: "58"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
-    nexttasks:
-      '#none#':
-      - "48"
-    note: false
-    quietmode: 0
-    scriptarguments:
-      incidentId:
-        simple: ${incident.id}
-      value:
-        simple: ${inputs.target_device}
-    separatecontext: false
-    skipunavailable: false
-    task:
-      brand: Builtin
-      description: Associates the device indicator to this incident; required when
-        this is run as part of a batch upgrade
-      id: 80a21366-7493-46ca-8458-697222d7cbb9
-      iscommand: true
-      name: Associate Device Indicator to this Incident
-      script: Builtin|||associateIndicatorToIncident
-      type: regular
-      version: -1
-    taskid: 80a21366-7493-46ca-8458-697222d7cbb9
-    timertriggers: []
-    type: regular
-    view: |-
-      {
-        "position": {
-          "x": 520,
-          "y": -2920
-        }
-      }
-  "59":
-    continueonerrortype: ""
-    id: "59"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
-    loop:
-      exitCondition: ""
-      iscommand: false
-      max: 100
-      wait: 1
     nexttasks:
       '#none#':
       - "68"
-    note: false
-    quietmode: 0
-    scriptarguments:
-      target:
-        simple: ${inputs.target_device}
-    separatecontext: true
-    skipunavailable: false
-    task:
-      brand: ""
-      description: Requests the available software images from a firewall, filters
-        them, then prompts the user to select the version.
-      id: a8f05f7f-04a2-4bd9-83e7-dfe58d21b2a6
-      iscommand: false
-      name: PAN-OS Network Operations - Filter and Select Available Software Images
-      playbookId: PAN-OS Network Operations - Filter and Select Available Software Images
-      type: playbook
-      version: -1
-    taskid: a8f05f7f-04a2-4bd9-83e7-dfe58d21b2a6
-    timertriggers: []
-    type: playbook
+    separatecontext: false
+    continueonerrortype: ""
     view: |-
       {
         "position": {
-          "x": 520,
-          "y": -1720
+          "x": 195.25,
+          "y": 50
         }
       }
-  "61":
-    continueonerrortype: ""
-    id: "61"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
     note: false
-    quietmode: 0
-    separatecontext: false
+    timertriggers: []
+    ignoreworker: false
     skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "48":
+    id: "48"
+    taskid: 932ddd71-494e-403b-8fe7-8cfe7b7815e9
+    type: regular
     task:
-      brand: ""
-      id: 187166ba-179f-439a-88c5-65b08ee0624a
-      iscommand: false
+      id: 932ddd71-494e-403b-8fe7-8cfe7b7815e9
+      version: -1
+      name: Set Status
+      description: commands.local.cmd.set.incident
+      script: Builtin|||setAlert
+      type: regular
+      iscommand: true
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "63"
+    scriptarguments:
+      name:
+        simple: PAN-OS Upgrade - ${inputs.target_device}
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 720
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "61":
+    id: "61"
+    taskid: e3032a01-2a00-405b-86de-b2d8abbb21aa
+    type: title
+    task:
+      id: e3032a01-2a00-405b-86de-b2d8abbb21aa
+      version: -1
       name: Complete!
       type: title
-      version: -1
-    taskid: 187166ba-179f-439a-88c5-65b08ee0624a
-    timertriggers: []
-    type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
     view: |-
       {
         "position": {
-          "x": 520,
-          "y": -1170
+          "x": 195.25,
+          "y": 1570
         }
       }
-  "62":
-    continueonerrortype: ""
-    id: "62"
+    note: false
+    timertriggers: []
     ignoreworker: false
-    isautoswitchedtoquietmode: false
+    skipunavailable: false
+    quietmode: 0
     isoversize: false
-    loop:
-      exitCondition: ""
-      forEach: true
+    isautoswitchedtoquietmode: false
+  "62":
+    id: "62"
+    taskid: 7c481649-e312-41d0-be9c-c5d01cc4c4be
+    type: playbook
+    task:
+      id: 7c481649-e312-41d0-be9c-c5d01cc4c4be
+      version: -1
+      name: PAN-OS Network Operations - Device Upgrade Loop
+      description: Upgrades a single or HA pair of PAN-OS firewalls, supports running
+        as a subplaybook and be looped over to complete an entire upgrade path.
+      playbookName: PAN-OS Network Operations - Device Upgrade Loop
+      type: playbook
       iscommand: false
-      max: 100
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "64"
+    scriptarguments:
+      AssuranceInstance:
+        simple: ${AssuranceInstance}
+      PanoramaInstance:
+        simple: ${PanoramaInstance}
+      autoclose_incident:
+        simple: "true"
+      reset_ha_topology:
+        simple: "false"
+      target_device:
+        simple: ${NGFWDevices}
+      target_version:
+        simple: ${UpgradePath}
+    separatecontext: true
+    continueonerrortype: ""
+    loop:
+      iscommand: false
+      exitCondition: ""
       wait: 1
+      max: 100
+      forEach: true
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 1060
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "63":
+    id: "63"
+    taskid: c59123ff-16ca-4b80-a50f-f78ce2e3568b
+    type: playbook
+    task:
+      id: c59123ff-16ca-4b80-a50f-f78ce2e3568b
+      version: -1
+      name: PAN-OS Network Operations - Software Select
+      description: Checks to validate that a version (if provided) is valid for upgrade
+      playbookName: PAN-OS Network Operations - Software Select
+      type: playbook
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "62"
+    scriptarguments:
+      PanoramaInstance:
+        simple: ${PanoramaInstance}
+      TargetDevice:
+        simple: ${NGFWDevices}
+      TargetVersion:
+        simple: ${alert.panosnetworkoperationstargetngfwsoftware}
+    separatecontext: true
+    continueonerrortype: ""
+    loop:
+      iscommand: false
+      exitCondition: ""
+      wait: 1
+      max: 100
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 890
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "64":
+    id: "64"
+    taskid: da879fb7-157c-47a1-9b89-2105f09ff467
+    type: condition
+    task:
+      id: da879fb7-157c-47a1-9b89-2105f09ff467
+      version: -1
+      name: Autoclose alert?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "61"
+      "yes":
+      - "65"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isEqualString
+          left:
+            value:
+              simple: inputs.autoclose_incident
+            iscontext: true
+          right:
+            value:
+              simple: "true"
+          ignorecase: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 1230
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "65":
+    id: "65"
+    taskid: da88c860-5ad3-43c5-8108-24f2f0f081a2
+    type: regular
+    task:
+      id: da88c860-5ad3-43c5-8108-24f2f0f081a2
+      version: -1
+      name: Close alert- Complete
+      description: commands.local.cmd.close.inv
+      script: Builtin|||closeInvestigation
+      type: regular
+      iscommand: true
+      brand: Builtin
     nexttasks:
       '#none#':
       - "61"
-    note: false
-    quietmode: 0
-    scriptarguments:
-      peer_device:
-        simple: ${incident.panosnetworkoperationsupgradepeerfirewall}
-      reset_ha_topology:
-        simple: "true"
-      target_device:
-        simple: ${inputs.target_device}
-      target_version:
-        simple: ${incident.upgradepath}
-    separatecontext: true
-    skipunavailable: false
-    task:
-      brand: ""
-      description: Upgrades a single or HA pair of PAN-OS firewalls, supports running
-        as a subplaybook and be looped over to complete an entire upgrade path.
-      id: 50dc3546-d006-401d-8d15-2784e25adb2e
-      iscommand: false
-      name: PAN-OS Network Operations - Device Upgrade Loop
-      playbookId: PAN-OS Network Operations - Device Upgrade Loop
-      type: playbook
-      version: -1
-    taskid: 50dc3546-d006-401d-8d15-2784e25adb2e
-    timertriggers: []
-    type: playbook
-    view: |-
-      {
-        "position": {
-          "x": 520,
-          "y": -1330
-        }
-      }
-  "63":
-    conditions:
-    - condition:
-      - - left:
-            iscontext: true
-            value:
-              simple: incident.panosnetworkoperationspanoramainstance
-          operator: isNotEmpty
-          right:
-            value: {}
-      label: "yes"
-    continueonerrortype: ""
-    id: "63"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
-    nexttasks:
-      '#default#':
-      - "64"
-      "yes":
-      - "59"
-    note: false
-    quietmode: 0
     separatecontext: false
-    skipunavailable: false
-    task:
-      brand: ""
-      id: 17c8bcef-9e0a-48dd-86e4-81fd700ae2e9
-      iscommand: false
-      name: Is Panorama Instance Set?
-      type: condition
-      version: -1
-    taskid: 17c8bcef-9e0a-48dd-86e4-81fd700ae2e9
-    timertriggers: []
-    type: condition
+    continueonerrortype: ""
     view: |-
       {
         "position": {
-          "x": 520,
-          "y": -2150
+          "x": 340.5,
+          "y": 1400
         }
       }
-  "64":
-    continueonerrortype: ""
-    id: "64"
+    note: false
+    timertriggers: []
     ignoreworker: false
-    isautoswitchedtoquietmode: false
+    skipunavailable: false
+    quietmode: 0
     isoversize: false
+    isautoswitchedtoquietmode: false
+  "66":
+    id: "66"
+    taskid: eef6bdc7-b452-41f0-85bc-9f386f8c7b13
+    type: playbook
+    task:
+      id: eef6bdc7-b452-41f0-85bc-9f386f8c7b13
+      version: -1
+      name: PAN-OS Network Operations - Query Devices
+      description: |-
+        This queries XQL (and prompts for the XQL if not present) to identify firewalls and panoramas to upgrade.
+
+        It outputs:
+        * necessary instance names for the Panorama and UpgradeAssurance integration instances
+        * list of firewall devices to be upgraded (from XQL query)
+        * list of panoramas to be ugprades (from XQL query)
+        * any errors that are found
+      playbookName: PAN-OS Network Operations - Query Devices
+      type: playbook
+      iscommand: false
+      brand: ""
     nexttasks:
       '#none#':
-      - "59"
-    note: false
-    quietmode: 0
-    scriptarguments:
-      instance:
-        simple: ${inputs.panorama_instance}
-    separatecontext: false
-    skipunavailable: false
-    task:
-      brand: ""
-      description: "This will set the Panorama instance field (panosnetworkoperationspanoramainstance) if it isn't already set.  "
-      id: d9814a7d-ab6a-4a7d-8a00-4835e6f58a06
-      iscommand: false
-      name: Set Panorama Instance
-      script: SetPanoramaInstance
-      type: regular
-      version: -1
-    taskid: d9814a7d-ab6a-4a7d-8a00-4835e6f58a06
-    timertriggers: []
-    type: regular
+      - "67"
+    separatecontext: true
+    continueonerrortype: ""
     view: |-
       {
         "position": {
-          "x": 520,
-          "y": -1930
+          "x": 195.25,
+          "y": 380
         }
       }
-  "68":
-    conditions:
-    - condition:
-      - - left:
-            iscontext: true
-            value:
-              simple: incident.upgradepath
-          operator: isNotEmpty
-      label: yes
-    continueonerrortype: ""
-    id: "68"
+    note: false
+    timertriggers: []
     ignoreworker: false
-    isautoswitchedtoquietmode: false
+    skipunavailable: false
+    quietmode: 0
     isoversize: false
+    isautoswitchedtoquietmode: false
+  "67":
+    id: "67"
+    taskid: a50b0eb4-0d58-4f18-82c3-253f3b9d609a
+    type: condition
+    task:
+      id: a50b0eb4-0d58-4f18-82c3-253f3b9d609a
+      version: -1
+      name: Any Errors from Query?
+      type: condition
+      iscommand: false
+      brand: ""
     nexttasks:
       '#default#':
-      - "69"
-      yes:
-      - "62"
-    note: false
-    quietmode: 0
+      - "48"
+      "yes":
+      - "65"
     separatecontext: false
-    skipunavailable: false
-    task:
-      brand: ""
-      id: c85aeeab-1823-426f-8828-c8303f531d6b
-      iscommand: false
-      name: Is upgrade path set?
-      type: condition
-      version: -1
-    taskid: c85aeeab-1823-426f-8828-c8303f531d6b
-    timertriggers: []
-    type: condition
-    view: |-
-      {
-        "position": {
-          "x": 520,
-          "y": -1540
-        }
-      }
-  "69":
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isNotEmpty
+          left:
+            value:
+              simple: Errors
+            iscontext: true
     continueonerrortype: ""
-    id: "69"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
-    note: false
-    quietmode: 0
-    scriptarguments:
-      message:
-        simple: No upgradepath set, make sure to select an higher PAN-OS version than the target firewall; or if you are upgrading a partially upgraded HA pair, target firewall with the lower version.
-    separatecontext: false
-    skipunavailable: false
-    task:
-      brand: ""
-      description: Prints an error entry with a given message
-      id: 340aeda1-f805-49e6-80ef-dd86d0fbf796
-      iscommand: false
-      name: No Upgrade Path Found.
-      script: PrintErrorEntry
-      type: regular
-      version: -1
-    taskid: 340aeda1-f805-49e6-80ef-dd86d0fbf796
-    timertriggers: []
-    type: regular
     view: |-
       {
         "position": {
-          "x": 980,
-          "y": -1330
+          "x": 195.25,
+          "y": 550
         }
       }
-version: 11
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "68":
+    id: "68"
+    taskid: b4814459-0f1e-4f10-8c2e-49b05771d892
+    type: regular
+    task:
+      id: b4814459-0f1e-4f10-8c2e-49b05771d892
+      version: -1
+      name: Delete context
+      description: |-
+        Delete field from context.
+
+        This automation runs using the default Limited User role, unless you explicitly change the permissions.
+        For more information, see the section about permissions here:
+        https://docs.paloaltonetworks.com/cortex/cortex-xsoar/6-2/cortex-xsoar-admin/playbooks/automations.html
+      scriptName: DeleteContext
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "66"
+    scriptarguments:
+      all:
+        simple: "yes"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 195.25,
+          "y": 210
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
 view: |-
   {
     "linkLabelsPosition": {},
     "paper": {
       "dimensions": {
-        "height": 1965,
-        "width": 840,
-        "x": 520,
-        "y": -3070
+        "height": 1580,
+        "width": 670.5,
+        "x": 50,
+        "y": 50
       }
     }
   }
+inputs: []
+inputSections:
+- inputs: []
+  name: General (Inputs group)
+  description: Generic group for inputs
+outputSections:
+- outputs: []
+  name: General (Outputs group)
+  description: Generic group for outputs
+outputs: []
+dirtyInputs: true

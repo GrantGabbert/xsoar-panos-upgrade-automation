@@ -1,0 +1,36 @@
+commonfields:
+  id: eb13fb07-3e19-4ea1-8471-44bfb128ef5e
+  version: 6
+vcShouldKeepItemLegacyProdMachine: false
+name: CreateUpgradeReport
+script: ''
+type: python
+tags: []
+comment: This script takes the results from readiness checks and/or snapshot comparison checks and appends the results in a report format
+enabled: true
+args:
+- name: readiness_results
+  description: The readiness test results
+  isArray: true
+- name: snapshot_results
+  description: The snapshot comparison results
+  isArray: true
+- name: existing_report
+  description: The current report value to append to.  If blank, a new report will be started
+- name: stage
+  auto: PREDEFINED
+  predefined:
+  - PreUpgrade
+  - PostFailover
+  - PostUpgrade
+  description: The stage of the upgrade process (eg Pre, HA, Post)
+outputs:
+- contextPath: UpgradeReport
+scripttarget: 0
+subtype: python3
+pswd: ''
+runonce: false
+dockerimage: demisto/python3:3.12.8.1983910
+runas: DBotWeakRole
+engineinfo: {}
+mainengineinfo: {}

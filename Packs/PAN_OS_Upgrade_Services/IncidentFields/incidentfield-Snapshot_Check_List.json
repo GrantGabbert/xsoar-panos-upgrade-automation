@@ -1,12 +1,15 @@
 {
 	"XDRBuiltInField": false,
+	"XsiamIncidentFieldExtraData": {
+		"incidentsFilter": null,
+		"slaGoals": null,
+		"slaTimer": null,
+		"timerConditions": null
+	},
 	"aliasTo": "",
 	"aliases": null,
-	"associatedToAll": false,
-	"associatedTypes": [
-		"PAN-OS Network Operations - Device Upgrade",
-		"PAN-OS Network Operations - Upgrade Assurance"
-	],
+	"associatedToAll": true,
+	"associatedTypes": null,
 	"autoCompleteTags": null,
 	"breachScript": "",
 	"cacheVersn": 0,
@@ -25,6 +28,7 @@
 	"hidden": false,
 	"id": "incident_snapshotchecklist",
 	"ipVersion": "",
+	"isOverridable": false,
 	"isReadOnly": false,
 	"itemVersion": "",
 	"locked": false,
@@ -32,7 +36,7 @@
 	"name": "Snapshot Check List",
 	"neverSetAsRequired": false,
 	"openEnded": false,
-	"orgType": "multiSelect",
+	"orgType": "",
 	"ownerOnly": false,
 	"packID": "",
 	"packName": "",

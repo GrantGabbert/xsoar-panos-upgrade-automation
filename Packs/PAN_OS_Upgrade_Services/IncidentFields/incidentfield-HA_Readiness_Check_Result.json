@@ -1,12 +1,15 @@
 {
 	"XDRBuiltInField": false,
+	"XsiamIncidentFieldExtraData": {
+		"incidentsFilter": null,
+		"slaGoals": null,
+		"slaTimer": null,
+		"timerConditions": null
+	},
 	"aliasTo": "",
 	"aliases": null,
-	"associatedToAll": false,
-	"associatedTypes": [
-		"PAN-OS Network Operations - Device Upgrade",
-		"PAN-OS Network Operations - Upgrade Assurance"
-	],
+	"associatedToAll": true,
+	"associatedTypes": null,
 	"autoCompleteTags": null,
 	"breachScript": "",
 	"cacheVersn": 0,
@@ -61,7 +64,7 @@
 		{}
 	],
 	"definitionId": "",
-	"description": "",
+	"description": "HA Readiness check results",
 	"editForm": true,
 	"fieldCalcScript": "",
 	"fromServerVersion": "",
@@ -69,6 +72,7 @@
 	"hidden": false,
 	"id": "incident_hareadinesscheckresult",
 	"ipVersion": "",
+	"isOverridable": false,
 	"isReadOnly": false,
 	"itemVersion": "",
 	"locked": false,
@@ -76,7 +80,7 @@
 	"name": "HA Readiness Check Result",
 	"neverSetAsRequired": false,
 	"openEnded": false,
-	"orgType": "grid",
+	"orgType": "",
 	"ownerOnly": false,
 	"packID": "",
 	"packName": "",
@@ -85,7 +89,7 @@
 	"required": false,
 	"runScriptAfterUpdate": false,
 	"script": "",
-	"selectValues": [],
+	"selectValues": null,
 	"selectValuesMap": null,
 	"sla": 0,
 	"system": false,

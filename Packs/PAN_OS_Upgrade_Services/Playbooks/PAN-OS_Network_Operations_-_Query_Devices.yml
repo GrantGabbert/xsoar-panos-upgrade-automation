@@ -1,0 +1,949 @@
+id: 661712ef-53e1-4c51-823e-e5c5d2c28220
+version: 13
+vcShouldKeepItemLegacyProdMachine: false
+name: PAN-OS Network Operations - Query Devices
+description: |-
+  This queries XQL (and prompts for the XQL if not present) to identify firewalls and panoramas to upgrade.
+
+  It outputs:
+  * necessary instance names for the Panorama and UpgradeAssurance integration instances
+  * list of firewall devices to be upgraded (from XQL query)
+  * list of panoramas to be ugprades (from XQL query)
+  * any errors that are found
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 17fccca7-9fee-43fb-8576-1bf028bc6186
+    type: start
+    task:
+      id: 17fccca7-9fee-43fb-8576-1bf028bc6186
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "19"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": -90
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: e223465f-9f25-4cb1-8848-10d3f98d5ea3
+    type: condition
+    task:
+      id: e223465f-9f25-4cb1-8848-10d3f98d5ea3
+      version: -1
+      name: Is XQL Set?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "4"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isNotEmpty
+          left:
+            value:
+              simple: alert.panosnetworkoperationsxql
+            iscontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 230
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: 9df5923f-6912-4e3e-853e-b9fa48c8bde2
+    type: collection
+    task:
+      id: 9df5923f-6912-4e3e-853e-b9fa48c8bde2
+      version: -1
+      name: Ask for Device XQL
+      type: collection
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "3"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 818,
+          "y": 415
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    message:
+      to: null
+      subject: null
+      body: null
+      methods: []
+      format: ""
+      bcc: null
+      cc: null
+      timings:
+        retriescount: 2
+        retriesinterval: 360
+        completeafterreplies: 1
+        completeafterv2: true
+        completeaftersla: false
+    form:
+      questions:
+      - id: "0"
+        label: ""
+        labelarg:
+          simple: What is the XQL to identify devices to upgrade?
+        required: true
+        gridcolumns: []
+        defaultrows: []
+        type: shortText
+        options: []
+        optionsarg: []
+        fieldassociated: ""
+        placeholder: ""
+        tooltip: ""
+        readonly: false
+      title: PAN-OS Operations - Missing XQL for Batch Upgrade
+      description: The XQL to identify devices for upgrade wasn't set.
+      sender: ""
+      expired: false
+      totalanswers: 0
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "3":
+    id: "3"
+    taskid: 204a2b2e-ecc0-4086-8693-150b6f1cf976
+    type: regular
+    task:
+      id: 204a2b2e-ecc0-4086-8693-150b6f1cf976
+      version: -1
+      name: Update the XQL
+      description: commands.local.cmd.set.incident
+      script: Builtin|||setAlert
+      type: regular
+      iscommand: true
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "4"
+    scriptarguments:
+      panosnetworkoperationsxql:
+        simple: ${PAN-OS Operations - Missing XQL for Batch Upgrade.Answers.0}
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 818,
+          "y": 587
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "4":
+    id: "4"
+    taskid: 50e54950-2e7b-4973-8cb3-a004f39a37b1
+    type: regular
+    task:
+      id: 50e54950-2e7b-4973-8cb3-a004f39a37b1
+      version: -1
+      name: Query Devices
+      description: |-
+        Execute an XQL query and retrieve results of an executed XQL query API. The command will be executed every 10 seconds until results are retrieved or until a timeout error is raised.
+        When more than 1000 results are retrieved, the command will return a compressed gzipped JSON format file,
+        unless the argument 'parse_result_file_to_context' is set to true and then the results will be extracted to the context.
+      script: XQL Query Engine|||xdr-xql-generic-query
+      type: regular
+      iscommand: true
+      brand: XQL Query Engine
+    nexttasks:
+      '#none#':
+      - "5"
+    scriptarguments:
+      max_fields:
+        simple: "100"
+      query:
+        simple: ${alert.panosnetworkoperationsxql}
+      query_name:
+        simple: PAN-OS Device Upgrade - Batch Query
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 449.5,
+          "y": 729
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "5":
+    id: "5"
+    taskid: 314e8f56-ba57-4f55-8ed6-97633ad7be76
+    type: condition
+    task:
+      id: 314e8f56-ba57-4f55-8ed6-97633ad7be76
+      version: -1
+      name: Did we get at least one device?
+      description: Check for device.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "13"
+      "yes":
+      - "6"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: greaterThan
+          left:
+            value:
+              simple: PaloAltoNetworksXQL.GenericQuery.number_of_results
+            iscontext: true
+          right:
+            value:
+              simple: "0"
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 449.5,
+          "y": 881
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "6":
+    id: "6"
+    taskid: c3c54b5c-0324-4f6f-8cc5-9a0a5754cc7d
+    type: title
+    task:
+      id: c3c54b5c-0324-4f6f-8cc5-9a0a5754cc7d
+      version: -1
+      name: Setup (Instance Names and Devices)
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "7"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 449.5,
+          "y": 1217
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "7":
+    id: "7"
+    taskid: be62615e-8f4b-4b56-8f1f-4466b6ca6ee6
+    type: regular
+    task:
+      id: be62615e-8f4b-4b56-8f1f-4466b6ca6ee6
+      version: -1
+      name: Set Panorama Instance
+      description: Set a value in context under the key you entered.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "8"
+    scriptarguments:
+      key:
+        simple: PanoramaInstance
+      value:
+        complex:
+          root: ${PaloAltoNetworksXQL.GenericQuery.results.[0]
+          accessor: panoramainstance}
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 449.5,
+          "y": 1372
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "8":
+    id: "8"
+    taskid: e366f372-ce28-41db-849b-02d9c21ef873
+    type: regular
+    task:
+      id: e366f372-ce28-41db-849b-02d9c21ef873
+      version: -1
+      name: Set Assurance Instance
+      description: Set a value in context under the key you entered.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "9"
+    scriptarguments:
+      key:
+        simple: AssuranceInstance
+      value:
+        complex:
+          root: ${PaloAltoNetworksXQL.GenericQuery.results.[0]
+          accessor: assuranceinstance}
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 449.5,
+          "y": 1529
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "9":
+    id: "9"
+    taskid: e24c22df-7612-4a16-8f63-78de8dab2e53
+    type: condition
+    task:
+      id: e24c22df-7612-4a16-8f63-78de8dab2e53
+      version: -1
+      name: Valid Instance Values?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "10"
+      "yes":
+      - "17"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isNotEmpty
+          left:
+            value:
+              simple: ${PanoramaInstance}
+            iscontext: true
+          right:
+            value: {}
+      - - operator: isNotEmpty
+          left:
+            value:
+              simple: ${AssuranceInstance}
+            iscontext: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 449.5,
+          "y": 1677
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "10":
+    id: "10"
+    taskid: ad78aef3-85d6-430c-89ee-8dff1bd1145b
+    type: regular
+    task:
+      id: ad78aef3-85d6-430c-89ee-8dff1bd1145b
+      version: -1
+      name: ERROR - Invalid Instances
+      description: Prints an error entry with a given message.
+      scriptName: PrintErrorEntry
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "16"
+    scriptarguments:
+      message:
+        simple: |-
+          The Panorama and Upgrade Assurance Instance values were not found.
+
+          Please ensure the URLs match between the following integration instances:
+          * Palo Alto Networks PAN-OS
+          * PAN-OS Device Management
+          * PAN-OS Assurance Testing
+
+          Once validated, either wait for the next fetch interval in the device management instance or force a re-fetch
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 1840
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "11":
+    id: "11"
+    taskid: 94d856a7-84dc-4261-8863-33354b458de6
+    type: regular
+    task:
+      id: 94d856a7-84dc-4261-8863-33354b458de6
+      version: -1
+      name: Set Panorama Devices
+      description: Set a value in context under the key you entered.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "18"
+    scriptarguments:
+      key:
+        simple: PanoramaDevices
+      value:
+        complex:
+          root: PaloAltoNetworksXQL.GenericQuery.results
+          filters:
+          - - operator: isEqualString
+              left:
+                value:
+                  simple: PaloAltoNetworksXQL.GenericQuery.results.devicemodel
+                iscontext: true
+              right:
+                value:
+                  simple: Panorama
+              ignorecase: true
+            - operator: startWith
+              left:
+                value:
+                  simple: PaloAltoNetworksXQL.GenericQuery.results.devicemodel
+                iscontext: true
+              right:
+                value:
+                  simple: m-
+              ignorecase: true
+          accessor: panoramahostname
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 1180,
+          "y": 1990
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "12":
+    id: "12"
+    taskid: 8ec9f8be-f9ee-478b-8324-fb39ace9b66d
+    type: regular
+    task:
+      id: 8ec9f8be-f9ee-478b-8324-fb39ace9b66d
+      version: -1
+      name: Set FW Devices
+      description: Set a value in context under the key you entered.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "15"
+    scriptarguments:
+      key:
+        simple: NGFWDevices
+      value:
+        complex:
+          root: ${PaloAltoNetworksXQL.GenericQuery.results(!val.systemmode)
+          accessor: serial}
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 1180,
+          "y": 2300
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "13":
+    id: "13"
+    taskid: 3c061162-6424-43f0-8fdd-7315a33982ba
+    type: regular
+    task:
+      id: 3c061162-6424-43f0-8fdd-7315a33982ba
+      version: -1
+      name: ERROR - No Devices Returned
+      description: Prints an error entry with a given message
+      scriptName: PrintErrorEntry
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "14"
+    scriptarguments:
+      message:
+        simple: "The XQL returned no results. \n\n${alert.panosnetworkoperationsxql}"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": -192,
+          "y": 1103
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "14":
+    id: "14"
+    taskid: 4a176784-ddee-4120-9f73-fb91c0761201
+    type: regular
+    task:
+      id: 4a176784-ddee-4120-9f73-fb91c0761201
+      version: -1
+      name: Set Errors
+      description: Set a value in context under the key you entered.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "15"
+    scriptarguments:
+      key:
+        simple: Errors
+      value:
+        simple: "The XQL returned no results. \n\n${alert.panosnetworkoperationsxql}"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": -192,
+          "y": 1277
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "15":
+    id: "15"
+    taskid: 7a6e0670-c6fa-4962-afa2-310172539900
+    type: title
+    task:
+      id: 7a6e0670-c6fa-4962-afa2-310172539900
+      version: -1
+      name: Done
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 2460
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "16":
+    id: "16"
+    taskid: 097f912d-11b8-4030-82fb-706f43d492c6
+    type: regular
+    task:
+      id: 097f912d-11b8-4030-82fb-706f43d492c6
+      version: -1
+      name: Set Errors
+      description: Set a value in context under the key you entered.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "15"
+    scriptarguments:
+      key:
+        simple: Errors
+      value:
+        simple: |-
+          The Panorama and Upgrade Assurance Instance values were not found.
+
+          Please ensure the URLs match between the following integration instances:
+          * Palo Alto Networks PAN-OS
+          * PAN-OS Device Management
+          * PAN-OS Assurance Testing
+
+          Once validated, either wait for the next fetch interval in the device management instance or force a re-fetch
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 1960
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "17":
+    id: "17"
+    taskid: e5b5f8a3-af6f-47de-a82c-ec6abcbf9620
+    type: condition
+    task:
+      id: e5b5f8a3-af6f-47de-a82c-ec6abcbf9620
+      version: -1
+      name: Are there Panorama Devices?
+      description: Set a value in context under the key you entered.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "18"
+      "yes":
+      - "11"
+    scriptarguments:
+      key:
+        simple: PanoramaDevices
+      value:
+        complex:
+          root: PaloAltoNetworksXQL.GenericQuery.results
+          filters:
+          - - operator: isEqualString
+              left:
+                value:
+                  simple: PaloAltoNetworksXQL.GenericQuery.results.devicemodel
+                iscontext: true
+              right:
+                value:
+                  simple: Panorama
+              ignorecase: true
+            - operator: startWith
+              left:
+                value:
+                  simple: PaloAltoNetworksXQL.GenericQuery.results.devicemodel
+                iscontext: true
+              right:
+                value:
+                  simple: m-
+              ignorecase: true
+          accessor: panoramahostname
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isEqualString
+          left:
+            value:
+              simple: PaloAltoNetworksXQL.GenericQuery.results.devicemodel
+            iscontext: true
+          right:
+            value:
+              simple: Panorama
+          ignorecase: true
+        - operator: startWith
+          left:
+            value:
+              simple: PaloAltoNetworksXQL.GenericQuery.results.devicemodel
+            iscontext: true
+          right:
+            value:
+              simple: m-
+          ignorecase: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 950,
+          "y": 1830
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "18":
+    id: "18"
+    taskid: 09493d4f-75ec-4779-871a-c773f5d017df
+    type: condition
+    task:
+      id: 09493d4f-75ec-4779-871a-c773f5d017df
+      version: -1
+      name: Are there NGFW  Devices?
+      description: Set a value in context under the key you entered.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "15"
+      "yes":
+      - "12"
+    scriptarguments:
+      key:
+        simple: PanoramaDevices
+      value:
+        complex:
+          root: PaloAltoNetworksXQL.GenericQuery.results
+          filters:
+          - - operator: isEqualString
+              left:
+                value:
+                  simple: PaloAltoNetworksXQL.GenericQuery.results.devicemodel
+                iscontext: true
+              right:
+                value:
+                  simple: Panorama
+              ignorecase: true
+            - operator: startWith
+              left:
+                value:
+                  simple: PaloAltoNetworksXQL.GenericQuery.results.devicemodel
+                iscontext: true
+              right:
+                value:
+                  simple: m-
+              ignorecase: true
+          accessor: panoramahostname
+          transformers:
+          - operator: uniq
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isNotEmpty
+          left:
+            value:
+              simple: ${PaloAltoNetworksXQL.GenericQuery.results(!val.systemmode).serial}
+            iscontext: true
+          ignorecase: true
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 950,
+          "y": 2140
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "19":
+    id: "19"
+    taskid: 2a6d2213-5bdd-44bd-8d72-7dea9f6fe372
+    type: regular
+    task:
+      id: 2a6d2213-5bdd-44bd-8d72-7dea9f6fe372
+      version: -1
+      name: Clear Context for Looping
+      description: "Delete field from context.\n\nThis automation runs using the default
+        Limited User role, unless you explicitly change the permissions.\nFor more
+        information, see the section about permissions here:\n- For Cortex XSOAR 6
+        see https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.x/Cortex-XSOAR-Playbook-Design-Guide/Automations
+        \n- For Cortex XSOAR 8 Cloud see https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/8/Cortex-XSOAR-Cloud-Documentation/Create-a-script\n-
+        For Cortex XSOAR 8.7 On-prem see https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/8.7/Cortex-XSOAR-On-prem-Documentation/Create-a-script"
+      scriptName: DeleteContext
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    scriptarguments:
+      all:
+        simple: "yes"
+      subplaybook:
+        simple: "yes"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 60
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 2610,
+        "width": 1752,
+        "x": -192,
+        "y": -90
+      }
+    }
+  }
+inputs: []
+inputSections:
+- inputs: []
+  name: General (Inputs group)
+  description: Generic group for inputs
+outputSections:
+- outputs:
+  - PanoramaInstance
+  - AssuranceInstance
+  - PanoramaDevices
+  - NGFWDevices
+  - Errors
+  name: General (Outputs group)
+  description: Generic group for outputs
+outputs:
+- contextPath: PanoramaInstance
+  type: string
+- contextPath: AssuranceInstance
+  type: string
+- contextPath: PanoramaDevices
+  type: unknown
+- contextPath: NGFWDevices
+  type: unknown
+- contextPath: Errors
+  type: unknown
+quiet: true
+dirtyInputs: true

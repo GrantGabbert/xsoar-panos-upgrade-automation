@@ -1,0 +1,46 @@
+commonfields:
+  id: 18cba853-99bd-463e-82c9-6156066b8128
+  version: 75
+vcShouldKeepItemLegacyProdMachine: false
+name: CreateFWUpgradeAlerts
+script: ''
+type: python
+tags: []
+comment: Uses the core-api generic POST integration command to create upgrade alerts for each device.
+enabled: true
+args:
+- name: TargetDevices
+  required: true
+  description: List of target device serial numbers to be upgraded
+- name: TargetVersion
+  required: true
+  description: Target software version for the upgrades
+- name: DeviceType
+  auto: PREDEFINED
+  predefined:
+  - NGFW
+  - Panorama
+  defaultValue: NGFW
+- name: Playbook
+  default: true
+  description: The name of the playbook to run on the created alerts, defaults to "PAN-OS Network Operations - Device Upgrade"
+  defaultValue: PAN-OS Network Operations - Device Upgrade
+- name: Domain
+  description: The domain to create the incident/alert in.  If not set, then the domain on the calling alert will be used
+- name: Auto
+  description: This determines if the alerts are to be auto-started.
+  defaultValue: 'false'
+outputs:
+- contextPath: CreatedAlertIDs
+  type: unknown
+scripttarget: 0
+subtype: python3
+dependson:
+  must:
+  - Core REST API|||core-api-post
+pswd: ''
+runonce: false
+dockerimage: demisto/python3:3.12.8.1983910
+runas: DBotWeakRole
+engineinfo: {}
+mainengineinfo: {}

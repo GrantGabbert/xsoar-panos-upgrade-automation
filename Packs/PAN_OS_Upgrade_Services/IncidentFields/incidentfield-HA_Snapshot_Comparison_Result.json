@@ -1,12 +1,15 @@
 {
 	"XDRBuiltInField": false,
+	"XsiamIncidentFieldExtraData": {
+		"incidentsFilter": null,
+		"slaGoals": null,
+		"slaTimer": null,
+		"timerConditions": null
+	},
 	"aliasTo": "",
 	"aliases": null,
-	"associatedToAll": false,
-	"associatedTypes": [
-		"PAN-OS Network Operations - Device Upgrade",
-		"PAN-OS Network Operations - Upgrade Assurance"
-	],
+	"associatedToAll": true,
+	"associatedTypes": null,
 	"autoCompleteTags": null,
 	"breachScript": "",
 	"cacheVersn": 0,
@@ -15,11 +18,11 @@
 	"closeForm": false,
 	"columns": [
 		{
-			"displayName": "Column Header 1",
+			"displayName": "Test",
 			"fieldCalcScript": "",
 			"isDefault": true,
 			"isReadOnly": false,
-			"key": "columnheader1",
+			"key": "test",
 			"orgType": "",
 			"required": false,
 			"script": "",
@@ -28,24 +31,11 @@
 			"width": 150
 		},
 		{
-			"displayName": "Column Header 2",
+			"displayName": "Passed",
 			"fieldCalcScript": "",
 			"isDefault": true,
 			"isReadOnly": false,
-			"key": "columnheader2",
-			"orgType": "",
-			"required": false,
-			"script": "",
-			"selectValues": null,
-			"type": "shortText",
-			"width": 150
-		},
-		{
-			"displayName": "Column Header 3",
-			"fieldCalcScript": "",
-			"isDefault": true,
-			"isReadOnly": false,
-			"key": "columnheader3",
+			"key": "passed",
 			"orgType": "",
 			"required": false,
 			"script": "",
@@ -56,7 +46,6 @@
 	],
 	"content": false,
 	"defaultRows": [
-		{},
 		{},
 		{}
 	],
@@ -69,6 +58,7 @@
 	"hidden": false,
 	"id": "incident_hasnapshotcomparisonresult",
 	"ipVersion": "",
+	"isOverridable": false,
 	"isReadOnly": false,
 	"itemVersion": "",
 	"locked": false,
@@ -81,7 +71,7 @@
 	"packID": "",
 	"packName": "",
 	"placeholder": "",
-	"pretty_name": "HA Snapshot Comparison Result",
+	"pretty_name": "",
 	"required": false,
 	"runScriptAfterUpdate": false,
 	"script": "",

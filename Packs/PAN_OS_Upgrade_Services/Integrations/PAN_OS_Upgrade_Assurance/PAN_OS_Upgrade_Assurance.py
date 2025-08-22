@@ -221,7 +221,7 @@ def compare_snapshots(left_snapshot, right_snapshot,
     if 'license' in snapshot_list:
         snapshot_comparisons.append({
             'license': {
-                'properties': ['!serial', '!issued', '!authcode']
+                'properties': ['feature', 'expired', 'expires']
             }
         })
 
@@ -270,7 +270,6 @@ def compare_snapshots(left_snapshot, right_snapshot,
                 'properties': ['status']
             }
         })
-
     return snapshot_compare.compare_snapshots(snapshot_comparisons)
 
 
@@ -460,3 +459,4 @@ def main():
 
 if __name__ == "__builtin__" or __name__ == "builtins":
     main()
+

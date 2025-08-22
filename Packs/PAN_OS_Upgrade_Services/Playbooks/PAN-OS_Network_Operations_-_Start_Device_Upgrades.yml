@@ -1,88 +1,71 @@
-description: |-
-  This playbook is used by the Domain Upgrade playbook to start (either manually or automatically) groups of Device Upgrade incidents.
-
-  It works by first retrieving the administrative domains/device-groups that have upgrades pending, then marking the pause tasks within them complete in batches.
 id: PAN-OS Network Operations - Start Device Upgrades
-inputs:
-- description: If set to true, will automatically start all device ugprades.
-  key: Automatically Upgrade
-  playbookInputQuery: null
-  required: false
-  value:
-    simple: ${incident.panosnetworkoperationsautomaticupgradeswitch}
-- description: List of incident IDs corresponding to device upgrade incidents to start.
-  key: incident_ids
-  playbookInputQuery: null
-  required: false
-  value:
-    simple: ${CreatedIncidentID}
+version: 9
+vcShouldKeepItemLegacyProdMachine: false
 name: PAN-OS Network Operations - Start Device Upgrades
-outputs: []
+description: |-
+  This playbook is used by the Batch Upgrade playbook to start (either manually or automatically) groups of Device Upgrade alerts.
+
+  It works by first retrieving the devices that have upgrades pending, then marking the pause tasks within them complete in batches.
 starttaskid: "0"
 tasks:
   "0":
-    continueonerrortype: ""
     id: "0"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
+    taskid: c40c8791-2ff3-4793-8768-2edc199f0059
+    type: start
+    task:
+      id: c40c8791-2ff3-4793-8768-2edc199f0059
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
     nexttasks:
       '#none#':
-      - "1"
-    note: false
-    quietmode: 0
+      - "5"
     separatecontext: false
-    skipunavailable: false
-    task:
-      brand: ""
-      id: 85335dba-205e-443b-8c36-49e5433f28a9
-      iscommand: false
-      name: ""
-      version: -1
-    taskid: 85335dba-205e-443b-8c36-49e5433f28a9
-    timertriggers: []
-    type: start
+    continueonerrortype: ""
     view: |-
       {
         "position": {
           "x": 450,
-          "y": 50
+          "y": -80
         }
       }
-  "1":
-    conditions:
-    - condition:
-      - - left:
-            iscontext: true
-            value:
-              simple: inputs.Automatically Upgrade
-          operator: isTrue
-      label: "yes"
-    continueonerrortype: ""
-    id: "1"
+    note: false
+    timertriggers: []
     ignoreworker: false
-    isautoswitchedtoquietmode: false
+    skipunavailable: false
+    quietmode: 0
     isoversize: false
+    isautoswitchedtoquietmode: false
+  "1":
+    id: "1"
+    taskid: 44406794-5660-4b7e-a32a-626a2f0e9a96
+    type: condition
+    task:
+      id: 44406794-5660-4b7e-a32a-626a2f0e9a96
+      version: -1
+      name: Is auto-upgrade enabled?
+      description: Check for automatic upgrade switch
+      type: condition
+      iscommand: false
+      brand: ""
     nexttasks:
       '#default#':
       - "3"
       "yes":
       - "2"
-    note: false
-    quietmode: 0
     separatecontext: false
-    skipunavailable: false
-    task:
-      brand: ""
-      description: Check for automatic upgrade switch
-      id: b5960953-a4b2-4048-817d-a04f8bf569ed
-      iscommand: false
-      name: Is auto-upgrade enabled?
-      type: condition
-      version: -1
-    taskid: b5960953-a4b2-4048-817d-a04f8bf569ed
-    timertriggers: []
-    type: condition
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isTrue
+          left:
+            value:
+              simple: inputs.Automatically Upgrade
+            iscontext: true
+          right:
+            value: {}
+    continueonerrortype: ""
     view: |-
       {
         "position": {
@@ -90,37 +73,39 @@ tasks:
           "y": 190
         }
       }
-  "2":
-    continueonerrortype: ""
-    id: "2"
+    note: false
+    timertriggers: []
     ignoreworker: false
-    isautoswitchedtoquietmode: false
+    skipunavailable: false
+    quietmode: 0
     isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: e83a812e-8831-4628-bbd1-8502ef742621
+    type: regular
+    task:
+      id: e83a812e-8831-4628-bbd1-8502ef742621
+      version: -1
+      name: Start device upgrades
+      description: commands.local.cmd.task.complete
+      script: Builtin|||taskComplete
+      type: regular
+      iscommand: true
+      brand: Builtin
     nexttasks:
       '#none#':
       - "4"
-    note: false
-    quietmode: 0
     scriptarguments:
+      alertId:
+        simple: ${inputs.alert_ids}
       id:
         simple: start-upgrade
       incidentId:
         complex:
           root: inputs.incident_ids
     separatecontext: false
-    skipunavailable: false
-    task:
-      brand: Builtin
-      description: commands.local.cmd.task.complete
-      id: af376f5a-e763-477f-8966-c047fe5f23d8
-      iscommand: true
-      name: Start device upgrades
-      script: Builtin|||taskComplete
-      type: regular
-      version: -1
-    taskid: af376f5a-e763-477f-8966-c047fe5f23d8
-    timertriggers: []
-    type: regular
+    continueonerrortype: ""
     view: |-
       {
         "position": {
@@ -128,60 +113,35 @@ tasks:
           "y": 580
         }
       }
-  "3":
-    continueonerrortype: ""
-    id: "3"
+    note: false
+    timertriggers: []
     ignoreworker: false
-    isautoswitchedtoquietmode: false
+    skipunavailable: false
+    quietmode: 0
     isoversize: false
-    message:
-      bcc: null
-      body:
-        simple: |-
-          Do you want to start all device upgrades?
+    isautoswitchedtoquietmode: false
+  "3":
+    id: "3"
+    taskid: 46eb0257-4c19-44ab-a29e-e0ae34a11485
+    type: condition
+    task:
+      id: 46eb0257-4c19-44ab-a29e-e0ae34a11485
+      version: -1
+      name: Begin Upgrades
+      description: |-
+        #### Do you want to start upgrading all devices?
 
-          This wil start upgrades on the following devices;
-
-          ${incident.panosnetworkoperationspanoramaupgradelist}
-
-          ${incident.panosnetworkoperationsfirewallupgradelist}
-      cc: null
-      format: ""
-      methods: []
-      replyOptions:
-      - "Yes"
-      - "No"
-      subject: null
-      timings:
-        completeafterreplies: 1
-        completeaftersla: false
-        completeafterv2: true
-        retriescount: 2
-        retriesinterval: 360
-      to: null
+        This will **start upgrades** on all of the devices, which may result in an **interruption to network traffic.**
+      type: condition
+      iscommand: false
+      brand: ""
     nexttasks:
       "No":
       - "4"
       "Yes":
       - "2"
-    note: false
-    quietmode: 0
     separatecontext: false
-    skipunavailable: false
-    task:
-      brand: ""
-      description: |-
-        #### Do you want to start upgrading all devices?
-
-        This will **start upgrades** on all of the devices, which may result in an **interruption to network traffic.**
-      id: 894a22ca-c6b6-41f9-85d8-fcfa22785ae4
-      iscommand: false
-      name: Begin Upgrades
-      type: condition
-      version: -1
-    taskid: 894a22ca-c6b6-41f9-85d8-fcfa22785ae4
-    timertriggers: []
-    type: condition
+    continueonerrortype: ""
     view: |-
       {
         "position": {
@@ -189,43 +149,152 @@ tasks:
           "y": 400
         }
       }
-  "4":
-    continueonerrortype: ""
-    id: "4"
-    ignoreworker: false
-    isautoswitchedtoquietmode: false
-    isoversize: false
     note: false
-    quietmode: 0
-    separatecontext: false
-    skipunavailable: false
-    task:
-      brand: ""
-      id: 43e22c47-1125-4ac4-810f-6a080b39d644
-      iscommand: false
-      name: Finish
-      type: title
-      version: -1
-    taskid: 43e22c47-1125-4ac4-810f-6a080b39d644
     timertriggers: []
+    ignoreworker: false
+    message:
+      to: null
+      subject: null
+      body:
+        simple: |-
+          Do you want to start all device upgrades?
+
+          This will start upgrades on the following devices;
+
+          ${inputs.PanoramaDevices}
+
+          ${inputs.NGFWDevices}
+      methods: []
+      format: ""
+      bcc: null
+      cc: null
+      timings:
+        retriescount: 2
+        retriesinterval: 360
+        completeafterreplies: 1
+        completeafterv2: true
+        completeaftersla: false
+      replyOptions:
+      - "Yes"
+      - "No"
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "4":
+    id: "4"
+    taskid: 53c1ac20-e57f-422e-9cc2-decc51c25010
     type: title
+    task:
+      id: 53c1ac20-e57f-422e-9cc2-decc51c25010
+      version: -1
+      name: DONE
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    continueonerrortype: ""
     view: |-
       {
         "position": {
           "x": 450,
-          "y": 740
+          "y": 758
         }
       }
-version: 7
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "5":
+    id: "5"
+    taskid: b86f7cc3-eec3-47b6-8139-24b7b94ecda6
+    type: regular
+    task:
+      id: b86f7cc3-eec3-47b6-8139-24b7b94ecda6
+      version: -1
+      name: Clear Context for Looping
+      description: "Delete field from context.\n\nThis automation runs using the default
+        Limited User role, unless you explicitly change the permissions.\nFor more
+        information, see the section about permissions here:\n- For Cortex XSOAR 6
+        see https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/6.x/Cortex-XSOAR-Playbook-Design-Guide/Automations
+        \n- For Cortex XSOAR 8 Cloud see https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/8/Cortex-XSOAR-Cloud-Documentation/Create-a-script\n-
+        For Cortex XSOAR 8.7 On-prem see https://docs-cortex.paloaltonetworks.com/r/Cortex-XSOAR/8.7/Cortex-XSOAR-On-prem-Documentation/Create-a-script"
+      scriptName: DeleteContext
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    scriptarguments:
+      all:
+        simple: "yes"
+      subplaybook:
+        simple: "yes"
+    separatecontext: false
+    continueonerrortype: ""
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 60
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
 view: |-
   {
     "linkLabelsPosition": {},
     "paper": {
       "dimensions": {
-        "height": 755,
+        "height": 898,
         "width": 650,
         "x": 450,
-        "y": 50
+        "y": -80
       }
     }
   }
+inputs:
+- key: Automatically Upgrade
+  value:
+    simple: ${alert.panosnetworkoperationsautomaticupgrade}
+  required: false
+  description: If set to true, will automatically start all device ugprades.
+  playbookInputQuery: null
+- key: alert_ids
+  value: {}
+  required: false
+  description: List of alert IDs corresponding to device upgrade alerts to start.
+  playbookInputQuery: null
+- key: PanoramaDevices
+  value: {}
+  required: false
+  description: A list of Panorama device IDs to upgrade
+  playbookInputQuery: null
+- key: NGFWDevices
+  value: {}
+  required: false
+  description: A list of NGFW device IDs to upgrade
+  playbookInputQuery: null
+inputSections:
+- inputs:
+  - Automatically Upgrade
+  - alert_ids
+  - PanoramaDevices
+  - NGFWDevices
+  name: General (Inputs group)
+  description: Generic group for inputs
+outputSections:
+- outputs: []
+  name: General (Outputs group)
+  description: Generic group for outputs
+outputs: []
+dirtyInputs: true

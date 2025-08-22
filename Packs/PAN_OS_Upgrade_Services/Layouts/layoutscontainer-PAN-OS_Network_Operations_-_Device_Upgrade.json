@@ -1,37 +1,6 @@
 {
 	"cacheVersn": 0,
-	"close": {
-		"sections": [
-			{
-				"description": "",
-				"fields": [
-					{
-						"fieldId": "incident_closereason",
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_closenotes",
-						"isVisible": true
-					}
-				],
-				"isVisible": true,
-				"name": "Basic Information",
-				"query": null,
-				"queryType": "",
-				"readOnly": false,
-				"type": ""
-			},
-			{
-				"description": "",
-				"isVisible": true,
-				"name": "Custom Fields",
-				"query": null,
-				"queryType": "",
-				"readOnly": false,
-				"type": ""
-			}
-		]
-	},
+	"close": null,
 	"definitionId": "",
 	"description": "",
 	"detached": false,
@@ -45,13 +14,131 @@
 				"type": "summary"
 			},
 			{
-				"id": "caseinfoid",
-				"name": "Upgrade Details",
+				"id": "it0mgyfih7",
+				"name": "Alert Overview",
 				"sections": [
 					{
 						"displayType": "ROW",
 						"h": 2,
-						"i": "caseinfoid-field-changed-caseinfoid-6aabad20-98b1-11e9-97d7-ed26ef9e46c8",
+						"i": "it0mgyfih7-w68olunplf-3podiwrjhh-caseinfoid-fce71720-98b0-11e9-97d7-ed26ef9e46c8",
+						"isVisible": true,
+						"items": [
+							{
+								"endCol": 2,
+								"fieldId": "timestamp",
+								"height": 26,
+								"id": "ca3282e0-ac81-11ed-90e1-81bc84c0d1fb",
+								"index": 0,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "alertid",
+								"height": 26,
+								"id": "abb90370-2762-11ec-9959-2922ebe0f011",
+								"index": 1,
+								"listId": "3podiwrjhh-caseinfoid-fce71720-98b0-11e9-97d7-ed26ef9e46c8",
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "type",
+								"height": 26,
+								"id": "incident-type-field",
+								"index": 2,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "playbookid",
+								"height": 26,
+								"id": "incident-playbookId-field",
+								"index": 3,
+								"listId": "w68olunplf-3podiwrjhh-caseinfoid-fce71720-98b0-11e9-97d7-ed26ef9e46c8",
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "sourcehostname",
+								"height": 26,
+								"id": "bfb2d810-2762-11ec-9959-2922ebe0f011",
+								"index": 4,
+								"listId": "caseinfoid-fce71720-98b0-11e9-97d7-ed26ef9e46c8",
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "sourceip",
+								"height": 26,
+								"id": "c28fb940-2762-11ec-9959-2922ebe0f011",
+								"index": 5,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "severity",
+								"height": 26,
+								"id": "incident-severity-field",
+								"index": 6,
+								"listId": "3podiwrjhh-caseinfoid-fce71720-98b0-11e9-97d7-ed26ef9e46c8",
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "sourcebrand",
+								"height": 26,
+								"id": "incident-sourceBrand-field",
+								"index": 7,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "sourceinstance",
+								"height": 26,
+								"id": "incident-sourceInstance-field",
+								"index": 8,
+								"sectionItemType": "field",
+								"startCol": 0
+							}
+						],
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Alert Details",
+						"static": false,
+						"w": 1,
+						"x": 0,
+						"y": 0
+					},
+					{
+						"h": 2,
+						"i": "it0mgyfih7-w68olunplf-3podiwrjhh-caseinfoid-61263cc0-98b1-11e9-97d7-ed26ef9e46c8",
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Notes",
+						"static": false,
+						"type": "notes",
+						"w": 1,
+						"x": 1,
+						"y": 4
+					},
+					{
+						"displayType": "ROW",
+						"h": 3,
+						"i": "it0mgyfih7-w68olunplf-3podiwrjhh-caseinfoid-6aabad20-98b1-11e9-97d7-ed26ef9e46c8",
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
@@ -63,120 +150,396 @@
 						"y": 0
 					},
 					{
-						"columns": [
+						"displayType": "ROW",
+						"h": 2,
+						"i": "it0mgyfih7-w68olunplf-3podiwrjhh-caseinfoid-88e6bf70-a0b1-11e9-b27f-13ae1773d289",
+						"isVisible": true,
+						"items": [
 							{
-								"displayed": true,
-								"isDefault": true,
-								"key": "value",
-								"width": 100
+								"endCol": 2,
+								"fieldId": "dbotclosed",
+								"height": 26,
+								"id": "incident-dbotClosed-field",
+								"index": 0,
+								"sectionItemType": "field",
+								"startCol": 0
 							},
 							{
-								"displayed": true,
-								"key": "Hostname",
-								"width": 194
+								"endCol": 2,
+								"fieldId": "closereason",
+								"height": 26,
+								"id": "incident-closeReason-field",
+								"index": 1,
+								"sectionItemType": "field",
+								"startCol": 0
 							},
 							{
-								"displayed": true,
-								"key": "Software Version",
-								"width": 153
-							},
-							{
-								"displayed": true,
-								"key": "Device Tags",
-								"width": 133
+								"endCol": 2,
+								"fieldId": "closenotes",
+								"height": 52,
+								"id": "incident-closeNotes-field",
+								"index": 2,
+								"sectionItemType": "field",
+								"startCol": 0
 							}
 						],
-						"description": "",
-						"h": 2,
-						"i": "caseinfoid-field-changed-caseinfoid-0f880450-16b4-11ed-afe0-bdd7fdc69d28",
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Closing Information",
+						"static": false,
+						"w": 1,
+						"x": 0,
+						"y": 4
+					},
+					{
+						"h": 4,
+						"i": "it0mgyfih7-w68olunplf-3podiwrjhh-9e343160-ac82-11ed-90e1-81bc84c0d1fb",
 						"items": [],
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
-						"name": "Target Device",
-						"query": "type:\"Panorama Device\" or type:\"Network Device\"",
-						"queryType": "input",
+						"name": "Command and Task Results",
+						"query": {
+							"categories": [
+								"commandAndResults",
+								"playbookTaskResult",
+								"playbookTaskStartAndDone",
+								"playbookErrors"
+							],
+							"preDefinedFilters": true,
+							"tags": []
+						},
+						"queryType": "warRoomFilter",
 						"static": false,
-						"type": "indicators",
+						"type": "invTimeline",
 						"w": 1,
 						"x": 1,
 						"y": 0
 					},
 					{
-						"description": "",
+						"h": 3,
+						"i": "it0mgyfih7-w68olunplf-3podiwrjhh-22ce89f0-b040-11ed-95eb-6fbf73c92c07",
+						"items": [],
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Malicious or Suspicious Indicators",
+						"query": "reputation:Bad or reputation:Suspicious",
+						"queryType": "input",
+						"static": false,
+						"type": "indicators",
+						"w": 2,
+						"x": 0,
+						"y": 6
+					},
+					{
 						"displayType": "ROW",
-						"h": 2,
+						"h": 3,
 						"hideName": false,
-						"i": "caseinfoid-field-changed-caseinfoid-46eb4140-1787-11ed-8d72-0d6d26ea3938",
+						"i": "it0mgyfih7-w68olunplf-3podiwrjhh-5b7abf80-b040-11ed-95eb-6fbf73c92c07",
 						"items": [
 							{
-								"endCol": 2,
-								"fieldId": "preupgradesnapshotfile",
-								"height": 22,
-								"id": "6abe3eb0-1787-11ed-8d72-0d6d26ea3938",
-								"index": 0,
-								"sectionItemType": "field",
-								"startCol": 0
-							},
-							{
-								"endCol": 2,
-								"fieldId": "assurancetestresult",
-								"height": 22,
-								"id": "f0736990-eb2b-11ed-a48e-3b53abdb4307",
-								"index": 0,
-								"sectionItemType": "field",
-								"startCol": 0
-							},
-							{
-								"endCol": 1,
-								"fieldId": "firstsnapshot",
-								"height": 53,
-								"id": "f63d3180-eb2b-11ed-a48e-3b53abdb4307",
-								"index": 1,
-								"sectionItemType": "field",
-								"startCol": 0
-							},
-							{
+								"args": {},
+								"buttonClass": "secondary",
 								"dropEffect": "move",
 								"endCol": 2,
-								"fieldId": "secondsnapshot",
-								"height": 53,
-								"id": "f9c51fc0-eb2b-11ed-a48e-3b53abdb4307",
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "cabada80-b057-11ed-95eb-6fbf73c92c07",
+								"index": 0,
+								"listId": "3podiwrjhh-5b7abf80-b040-11ed-95eb-6fbf73c92c07",
+								"name": "Extract indicators from text file",
+								"scriptId": "ExtractIndicatorsFromTextFile",
+								"sectionItemType": "button",
+								"startCol": 0
+							},
+							{
+								"args": {
+									"exclude_TLD": {
+										"simple": "",
+										"userMarkedRequired": true
+									},
+									"exclude_indicators": {
+										"simple": "",
+										"userMarkedRequired": true
+									},
+									"unescape_domain": {
+										"simple": "",
+										"userMarkedRequired": true
+									}
+								},
+								"buttonClass": "secondary",
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "cc0ed1c0-b057-11ed-95eb-6fbf73c92c07",
 								"index": 1,
-								"listId": "caseinfoid-field-changed-caseinfoid-46eb4140-1787-11ed-8d72-0d6d26ea3938",
-								"sectionItemType": "field",
-								"startCol": 1
+								"listId": "3podiwrjhh-5b7abf80-b040-11ed-95eb-6fbf73c92c07",
+								"name": "Extract indicators from a blog",
+								"scriptId": "ParseHTMLIndicators",
+								"sectionItemType": "button",
+								"startCol": 0
+							},
+							{
+								"args": {
+									"using-brand": {
+										"simple": "",
+										"userMarkedRequired": true
+									}
+								},
+								"buttonClass": "secondary",
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "cd789af0-b057-11ed-95eb-6fbf73c92c07",
+								"index": 2,
+								"listId": "3podiwrjhh-5b7abf80-b040-11ed-95eb-6fbf73c92c07",
+								"name": "Enrich indicators",
+								"scriptId": "Builtin|||enrichIndicators",
+								"sectionItemType": "button",
+								"startCol": 0
+							},
+							{
+								"args": {},
+								"buttonClass": "secondary",
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "199cd250-b055-11ed-95eb-6fbf73c92c07",
+								"index": 3,
+								"listId": "3podiwrjhh-5b7abf80-b040-11ed-95eb-6fbf73c92c07",
+								"name": "Tag Indicators",
+								"scriptId": "AppendindicatorFieldWrapper",
+								"sectionItemType": "button",
+								"startCol": 0
+							},
+							{
+								"args": {
+									"comment": {
+										"simple": "",
+										"userMarkedRequired": true
+									}
+								},
+								"buttonClass": "error",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "1760ec10-b055-11ed-95eb-6fbf73c92c07",
+								"index": 4,
+								"name": "Block Hash List",
+								"scriptId": "Cortex Core - IR|||core-blocklist-files",
+								"sectionItemType": "button",
+								"startCol": 0
+							},
+							{
+								"args": {
+									"comment": {
+										"simple": "",
+										"userMarkedRequired": true
+									}
+								},
+								"buttonClass": "success",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "18782870-b055-11ed-95eb-6fbf73c92c07",
+								"index": 5,
+								"name": "Allow Hash List",
+								"scriptId": "Cortex Core - IR|||core-allowlist-files",
+								"sectionItemType": "button",
+								"startCol": 0
 							}
 						],
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
-						"name": "Assurance Tests",
+						"name": "Indicators Handling",
 						"static": false,
 						"w": 1,
-						"x": 1,
-						"y": 2
+						"x": 2,
+						"y": 6
 					},
 					{
-						"displayType": "CARD",
-						"h": 4,
+						"displayType": "ROW",
+						"h": 3,
 						"hideName": false,
-						"i": "caseinfoid-field-changed-caseinfoid-94a59370-2913-11ed-beb7-e7d1c9c3493b",
+						"i": "it0mgyfih7-w68olunplf-3podiwrjhh-c0edb6d0-b1d8-11ed-922b-b50d0a485e48",
+						"items": [
+							{
+								"args": {},
+								"buttonClass": "secondary",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "557b46d0-b1db-11ed-922b-b50d0a485e48",
+								"index": 0,
+								"name": "Domain Prevalence",
+								"scriptId": "Cortex Core - IR|||core-get-domain-analytics-prevalence",
+								"sectionItemType": "button",
+								"startCol": 0
+							},
+							{
+								"args": {},
+								"buttonClass": "secondary",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "5231c120-b1db-11ed-922b-b50d0a485e48",
+								"index": 1,
+								"name": "IP Prevalence",
+								"scriptId": "Cortex Core - IR|||core-get-IP-analytics-prevalence",
+								"sectionItemType": "button",
+								"startCol": 0
+							},
+							{
+								"args": {},
+								"buttonClass": "secondary",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "5359ed70-b1db-11ed-922b-b50d0a485e48",
+								"index": 2,
+								"name": "Hash Prevalence",
+								"scriptId": "Cortex Core - IR|||core-get-hash-analytics-prevalence",
+								"sectionItemType": "button",
+								"startCol": 0
+							},
+							{
+								"args": {},
+								"buttonClass": "secondary",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "56c44190-b1db-11ed-922b-b50d0a485e48",
+								"index": 3,
+								"name": "Process Prevalence",
+								"scriptId": "Cortex Core - IR|||core-get-process-analytics-prevalence",
+								"sectionItemType": "button",
+								"startCol": 0
+							},
+							{
+								"args": {},
+								"buttonClass": "secondary",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "57db2fd0-b1db-11ed-922b-b50d0a485e48",
+								"index": 4,
+								"name": "CMD Prevalence",
+								"scriptId": "Cortex Core - IR|||core-get-cmd-analytics-prevalence",
+								"sectionItemType": "button",
+								"startCol": 0
+							},
+							{
+								"args": {},
+								"buttonClass": "secondary",
+								"endCol": 2,
+								"fieldId": "",
+								"height": 44,
+								"hexColor": null,
+								"id": "59147320-b1db-11ed-922b-b50d0a485e48",
+								"index": 5,
+								"name": "Registry Prevalence",
+								"scriptId": "Cortex Core - IR|||core-get-registry-analytics-prevalence",
+								"sectionItemType": "button",
+								"startCol": 0
+							}
+						],
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Analytics Prevalence Check",
+						"static": false,
+						"w": 1,
+						"x": 2,
+						"y": 3
+					},
+					{
+						"displayType": "ROW",
+						"h": 2,
+						"hideName": false,
+						"i": "it0mgyfih7-w68olunplf-3podiwrjhh-68821790-b77b-11ed-a817-f75b1612b8eb",
 						"items": [
 							{
 								"endCol": 2,
-								"fieldId": "owner",
-								"height": 53,
-								"id": "incident-owner-field",
+								"fieldId": "hostname",
+								"height": 26,
+								"id": "81791550-b77b-11ed-a817-f75b1612b8eb",
 								"index": 0,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
 							{
 								"endCol": 2,
+								"fieldId": "hostip",
+								"height": 26,
+								"id": "831d4f70-b77b-11ed-a817-f75b1612b8eb",
+								"index": 1,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "username",
+								"height": 26,
+								"id": "88fe9700-b77b-11ed-a817-f75b1612b8eb",
+								"index": 2,
+								"sectionItemType": "field",
+								"startCol": 0
+							}
+						],
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Target Identification",
+						"static": false,
+						"w": 1,
+						"x": 0,
+						"y": 2
+					}
+				],
+				"showEmptyFields": true,
+				"type": "custom"
+			},
+			{
+				"id": "caseinfoid",
+				"name": "Upgrade Details",
+				"sections": [
+					{
+						"displayType": "ROW",
+						"h": 3,
+						"i": "caseinfoid-field-changed-caseinfoid-fce71720-98b0-11e9-97d7-ed26ef9e46c8",
+						"isVisible": true,
+						"items": [
+							{
+								"endCol": 2,
 								"fieldId": "type",
-								"height": 53,
+								"height": 26,
 								"id": "incident-type-field",
+								"index": 0,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "owner",
+								"height": 26,
+								"id": "incident-owner-field",
 								"index": 1,
 								"sectionItemType": "field",
 								"startCol": 0
@@ -184,7 +547,7 @@
 							{
 								"endCol": 2,
 								"fieldId": "deviceupgradetimer",
-								"height": 53,
+								"height": 26,
 								"id": "303b9300-5298-11ec-946c-1f59ee118fec",
 								"index": 2,
 								"sectionItemType": "field",
@@ -193,27 +556,54 @@
 							{
 								"endCol": 2,
 								"fieldId": "description",
-								"height": 53,
+								"height": 26,
 								"id": "867ef420-394f-11ed-b057-f7592006a9bc",
-								"index": 3,
+								"index": 2,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
 							{
 								"endCol": 2,
 								"fieldId": "details",
-								"height": 106,
+								"height": 52,
 								"id": "7efb4730-394f-11ed-b057-f7592006a9bc",
-								"index": 4,
+								"index": 3,
+								"sectionItemType": "field",
+								"startCol": 0
+							}
+						],
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Upgrade Details",
+						"static": false,
+						"w": 1,
+						"x": 0,
+						"y": 0
+					},
+					{
+						"displayType": "ROW",
+						"h": 3,
+						"hideName": false,
+						"i": "caseinfoid-field-changed-caseinfoid-94a59370-2913-11ed-beb7-e7d1c9c3493b",
+						"items": [
+							{
+								"dropEffect": "move",
+								"endCol": 4,
+								"fieldId": "panosnetworkoperationsxql",
+								"height": 26,
+								"id": "cf6cb866-0bc6-4753-b294-6bb5ecde6b43",
+								"index": 0,
+								"listId": "caseinfoid-field-changed-caseinfoid-94a59370-2913-11ed-beb7-e7d1c9c3493b",
 								"sectionItemType": "field",
 								"startCol": 0
 							},
 							{
 								"endCol": 2,
 								"fieldId": "releasenotes",
-								"height": 53,
+								"height": 26,
 								"id": "aa317000-2b53-11ed-9983-57e28e0b15d1",
-								"index": 5,
+								"index": 1,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
@@ -221,9 +611,9 @@
 								"dropEffect": "move",
 								"endCol": 2,
 								"fieldId": "panosnetworkoperationsupgradetargetversion",
-								"height": 53,
+								"height": 26,
 								"id": "bea68c60-518c-11ec-8192-5b2617803d78",
-								"index": 6,
+								"index": 1,
 								"listId": "caseinfoid-94a59370-2913-11ed-beb7-e7d1c9c3493b",
 								"sectionItemType": "field",
 								"startCol": 0
@@ -231,9 +621,9 @@
 							{
 								"endCol": 2,
 								"fieldId": "upgradepath",
-								"height": 53,
+								"height": 26,
 								"id": "aad66c50-2913-11ed-beb7-e7d1c9c3493b",
-								"index": 7,
+								"index": 1,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
@@ -241,9 +631,9 @@
 								"dropEffect": "move",
 								"endCol": 2,
 								"fieldId": "nextupgradeversion",
-								"height": 53,
+								"height": 26,
 								"id": "b722ebf0-2913-11ed-beb7-e7d1c9c3493b",
-								"index": 8,
+								"index": 1,
 								"listId": "caseinfoid-94a59370-2913-11ed-beb7-e7d1c9c3493b",
 								"sectionItemType": "field",
 								"startCol": 0
@@ -252,9 +642,9 @@
 								"dropEffect": "move",
 								"endCol": 2,
 								"fieldId": "panosnetworkoperationsupgradepeerfirewall",
-								"height": 53,
+								"height": 26,
 								"id": "5df9cdf0-179d-11ed-94d2-5958c8c003f6",
-								"index": 9,
+								"index": 1,
 								"listId": "caseinfoid-fce71720-98b0-11e9-97d7-ed26ef9e46c8",
 								"sectionItemType": "field",
 								"startCol": 0
@@ -263,9 +653,9 @@
 								"dropEffect": "move",
 								"endCol": 2,
 								"fieldId": "panosnetworkoperationstarget",
-								"height": 53,
+								"height": 26,
 								"id": "3fd34c70-179d-11ed-94d2-5958c8c003f6",
-								"index": 10,
+								"index": 1,
 								"listId": "caseinfoid-fce71720-98b0-11e9-97d7-ed26ef9e46c8",
 								"sectionItemType": "field",
 								"startCol": 0
@@ -273,18 +663,87 @@
 							{
 								"endCol": 2,
 								"fieldId": "completedupgradeversions",
-								"height": 53,
+								"height": 26,
 								"id": "863d0bd0-297a-11ed-a5ba-67a09e091ca3",
-								"index": 11,
+								"index": 1,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
 							{
 								"endCol": 2,
 								"fieldId": "upgradeconfirmed",
-								"height": 53,
+								"height": 26,
 								"id": "e74f5180-29e8-11ed-a245-61eb5379ed45",
-								"index": 12,
+								"index": 1,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "panosnetworkoperationstargetngfwsoftware",
+								"height": 26,
+								"id": "a1bad07d-4151-44eb-a8ee-e1611f663736",
+								"index": 1,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "panosnetworkoperationstargetpanoramasoftware",
+								"height": 26,
+								"id": "5179d509-16fc-4e17-9a21-9541ab5e78fd",
+								"index": 2,
+								"listId": "caseinfoid-field-changed-caseinfoid-94a59370-2913-11ed-beb7-e7d1c9c3493b",
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "panosnetworkoperationsautomaticupgrade",
+								"height": 26,
+								"id": "540ec277-80eb-4579-bb02-43e587b4f0a7",
+								"index": 3,
+								"listId": "caseinfoid-field-changed-caseinfoid-94a59370-2913-11ed-beb7-e7d1c9c3493b",
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "readinesschecklist",
+								"height": 26,
+								"id": "5e8946f6-ee83-4cf3-8764-2d99413c9e98",
+								"index": 4,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "snapshotchecklist",
+								"height": 26,
+								"id": "4155fe9a-4a1d-42ec-b98f-1529fa5bd6f4",
+								"index": 5,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "checkarpentryexists",
+								"height": 26,
+								"id": "ac3beac3-6ae6-465e-96c9-a5c07e3b12d5",
+								"index": 6,
+								"listId": "caseinfoid-field-changed-caseinfoid-94a59370-2913-11ed-beb7-e7d1c9c3493b",
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "checksessionexists",
+								"height": 26,
+								"id": "7e2571fe-b719-4ec5-a0dd-77467ca76e6b",
+								"index": 7,
 								"sectionItemType": "field",
 								"startCol": 0
 							}
@@ -296,45 +755,12 @@
 						"static": false,
 						"w": 1,
 						"wrapLabels": true,
-						"x": 0,
+						"x": 1,
 						"y": 0
 					},
 					{
 						"displayType": "ROW",
-						"h": 1,
-						"hideName": false,
-						"i": "caseinfoid-field-changed-caseinfoid-2b196e40-2b48-11ed-9983-57e28e0b15d1",
-						"items": [
-							{
-								"args": {
-									"name": {
-										"simple": "PAN-OS Network Operations - Device Upgrade"
-									}
-								},
-								"buttonClass": "warning",
-								"endCol": 2,
-								"fieldId": "",
-								"height": 44,
-								"id": "3134b190-2b48-11ed-9983-57e28e0b15d1",
-								"index": 0,
-								"name": "Restart Upgrade",
-								"scriptId": "Builtin|||setPlaybook",
-								"sectionItemType": "button",
-								"startCol": 0
-							}
-						],
-						"maxW": 3,
-						"minH": 1,
-						"moved": false,
-						"name": "Actions",
-						"static": false,
-						"w": 1,
-						"x": 2,
-						"y": 12
-					},
-					{
-						"displayType": "ROW",
-						"h": 4,
+						"h": 3,
 						"hideName": false,
 						"i": "caseinfoid-64ce22c0-eb2d-11ed-a48e-3b53abdb4307",
 						"items": [
@@ -354,68 +780,101 @@
 						"name": "Pre-Upgrade tests",
 						"static": false,
 						"w": 1,
-						"x": 1,
-						"y": 4
+						"x": 0,
+						"y": 3
 					},
 					{
 						"displayType": "ROW",
-						"h": 2,
+						"h": 3,
+						"hideItemTitleOnlyOne": true,
 						"hideName": false,
-						"i": "caseinfoid-ef0c0210-122b-11ef-aed6-958b0929b884",
+						"i": "caseinfoid-6db15306-e52d-4ddf-9ea9-e9598f8118ea",
 						"items": [
 							{
 								"endCol": 2,
-								"fieldId": "haassurancetestresult",
-								"height": 26,
-								"id": "10e9bf30-122c-11ef-aed6-958b0929b884",
+								"fieldId": "snapshotcomparisonresult",
+								"height": 106,
+								"id": "bf32308c-1b55-49bc-8e1a-271def437990",
 								"index": 0,
 								"sectionItemType": "field",
 								"startCol": 0
-							},
-							{
-								"dropEffect": "move",
-								"endCol": 1,
-								"fieldId": "firstsnapshot",
-								"height": 53,
-								"id": "323686f0-122c-11ef-aed6-958b0929b884",
-								"index": 1,
-								"listId": "caseinfoid-ef0c0210-122b-11ef-aed6-958b0929b884",
-								"sectionItemType": "field",
-								"startCol": 0
-							},
-							{
-								"dropEffect": "move",
-								"endCol": 2,
-								"fieldId": "hasnapshot",
-								"height": 53,
-								"id": "4412f9d0-122c-11ef-aed6-958b0929b884",
-								"index": 1,
-								"listId": "caseinfoid-ef0c0210-122b-11ef-aed6-958b0929b884",
-								"sectionItemType": "field",
-								"startCol": 1
 							}
 						],
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
-						"name": "HA Assurance Tests (post failover)",
+						"name": "Post Upgrade Snapshot Comparison Result",
 						"static": false,
 						"w": 1,
-						"wrapLabels": true,
-						"x": 2,
-						"y": 2
+						"x": 1,
+						"y": 6
 					},
 					{
 						"displayType": "ROW",
-						"h": 4,
+						"h": 9,
+						"hideItemTitleOnlyOne": true,
 						"hideName": false,
-						"i": "caseinfoid-6bbfd611-122c-11ef-aed6-958b0929b884",
+						"i": "caseinfoid-e404cdc8-6085-457a-8b8f-d268b66899d8",
+						"items": [
+							{
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "upgradeassurancereport",
+								"height": 106,
+								"id": "8c706d81-2304-4128-b63e-662c44461ad7",
+								"index": 0,
+								"listId": "caseinfoid-e404cdc8-6085-457a-8b8f-d268b66899d8",
+								"sectionItemType": "field",
+								"startCol": 0
+							}
+						],
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Upgrade Assurance Report",
+						"static": false,
+						"w": 1,
+						"x": 2,
+						"y": 0
+					},
+					{
+						"displayType": "ROW",
+						"h": 3,
+						"hideItemTitleOnlyOne": true,
+						"hideName": false,
+						"i": "caseinfoid-f0be5760-59be-470d-ab88-b084e21891ca",
+						"items": [
+							{
+								"endCol": 2,
+								"fieldId": "hasnapshotcomparisonresult",
+								"height": 106,
+								"id": "e2479b18-1ac4-42cf-be64-140de1cb7455",
+								"index": 0,
+								"sectionItemType": "field",
+								"startCol": 0
+							}
+						],
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "HA Snapshot Comparison Result",
+						"static": false,
+						"w": 1,
+						"x": 0,
+						"y": 6
+					},
+					{
+						"displayType": "ROW",
+						"h": 3,
+						"hideItemTitleOnlyOne": true,
+						"hideName": false,
+						"i": "caseinfoid-94eff0dd-d50c-4465-9e57-fe0a6bb18962",
 						"items": [
 							{
 								"endCol": 2,
 								"fieldId": "hareadinesscheckresult",
 								"height": 26,
-								"id": "80030fc0-122c-11ef-aed6-958b0929b884",
+								"id": "327650a8-9e22-4f74-92a4-4a681b1e3b38",
 								"index": 0,
 								"sectionItemType": "field",
 								"startCol": 0
@@ -424,227 +883,133 @@
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
-						"name": "HA Readiness Check (post failover)",
+						"name": "HA Readiness Check Result",
 						"static": false,
 						"w": 1,
 						"x": 1,
-						"y": 8
-					},
+						"y": 3
+					}
+				],
+				"type": "custom"
+			},
+			{
+				"hidden": false,
+				"id": "djtlpqvznz",
+				"name": "Technical Information",
+				"sections": [
 					{
-						"displayType": "CARD",
+						"displayType": "ROW",
 						"h": 4,
 						"hideName": false,
-						"i": "caseinfoid-491c8950-12cc-11ef-ab49-7fecada25a42",
+						"i": "qsgvqdodxl-3podiwrjhh-caseinfoid-38f848d0-9a45-11ed-aff5-5d4496197108",
 						"items": [
 							{
 								"dropEffect": "move",
 								"endCol": 2,
-								"fieldId": "haupgradeassurancereport",
-								"height": 106,
-								"id": "286148e0-122c-11ef-aed6-958b0929b884",
-								"index": 0,
-								"listId": "caseinfoid-ef0c0210-122b-11ef-aed6-958b0929b884",
-								"sectionItemType": "field",
-								"startCol": 0
-							}
-						],
-						"maxW": 3,
-						"minH": 1,
-						"moved": false,
-						"name": "HA Upgrade Assurance Report (post Failover)",
-						"static": false,
-						"w": 1,
-						"x": 2,
-						"y": 8
-					},
-					{
-						"displayType": "CARD",
-						"h": 4,
-						"hideName": false,
-						"i": "caseinfoid-7c484e70-12ec-11ef-ab49-7fecada25a42",
-						"items": [
-							{
-								"endCol": 2,
-								"fieldId": "upgradeassurancereport",
+								"fieldId": "agent_ip_addresses",
 								"height": 26,
-								"id": "b52a12f0-12ec-11ef-ab49-7fecada25a42",
-								"index": 0,
+								"id": "b7595950-a2e5-11ed-81fe-3f9032ac5cab",
+								"index": -2,
+								"listId": "3podiwrjhh-caseinfoid-38f848d0-9a45-11ed-aff5-5d4496197108",
 								"sectionItemType": "field",
 								"startCol": 0
-							}
-						],
-						"maxW": 3,
-						"minH": 1,
-						"moved": false,
-						"name": "Final Upgrade Assurance Report",
-						"static": false,
-						"w": 1,
-						"wrapLabels": false,
-						"x": 2,
-						"y": 4
-					},
-					{
-						"displayType": "CARD",
-						"h": 4,
-						"i": "caseinfoid-e54b1770-a0b1-11e9-b27f-13ae1773d289",
-						"isVisible": true,
-						"items": [
+							},
 							{
 								"endCol": 2,
-								"fieldId": "readinesschecklist",
-								"height": 53,
-								"id": "578676f0-ea40-11ed-939f-4f8b882605d4",
+								"fieldId": "remotehost",
+								"height": 26,
+								"id": "84f9a7d0-b73f-11ed-977b-dd8e6ac87856",
 								"index": 0,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
 							{
 								"endCol": 2,
-								"fieldId": "minimumcontentversion",
-								"filters": [
-									[
-										{
-											"ignoreCase": false,
-											"left": {
-												"isContext": true,
-												"value": {
-													"simple": "readinesschecklist"
-												}
-											},
-											"operator": "containsGeneral",
-											"right": {
-												"isContext": false,
-												"value": {
-													"simple": "content_version"
-												}
-											},
-											"type": "multiSelect"
-										}
-									]
-								],
-								"height": 53,
-								"id": "79972af0-ea40-11ed-939f-4f8b882605d4",
+								"fieldId": "remoteip",
+								"height": 26,
+								"id": "73f879c0-b73f-11ed-977b-dd8e6ac87856",
 								"index": 1,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
 							{
 								"endCol": 2,
-								"fieldId": "checksessionexists",
-								"filters": [
-									[
-										{
-											"ignoreCase": false,
-											"left": {
-												"isContext": true,
-												"value": {
-													"simple": "readinesschecklist"
-												}
-											},
-											"operator": "containsGeneral",
-											"right": {
-												"isContext": false,
-												"value": {
-													"simple": "session_exist"
-												}
-											},
-											"type": "multiSelect"
-										}
-									]
-								],
-								"height": 53,
-								"id": "694a9300-3c96-11ee-a0fd-e5af4a0a9390",
-								"index": 2,
-								"sectionItemType": "field",
-								"startCol": 0
-							},
-							{
-								"endCol": 2,
-								"fieldId": "checkarpentryexists",
-								"filters": [
-									[
-										{
-											"ignoreCase": false,
-											"left": {
-												"isContext": true,
-												"value": {
-													"simple": "readinesschecklist"
-												}
-											},
-											"operator": "containsGeneral",
-											"right": {
-												"isContext": false,
-												"value": {
-													"simple": "arp"
-												}
-											},
-											"type": "multiSelect"
-										}
-									]
-								],
-								"height": 53,
-								"id": "6b700b10-3c96-11ee-a0fd-e5af4a0a9390",
+								"fieldId": "remoteport",
+								"height": 26,
+								"id": "771ceb40-b73f-11ed-977b-dd8e6ac87856",
 								"index": 3,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
 							{
 								"endCol": 2,
-								"fieldId": "ipsectunnel",
-								"filters": [
-									[
-										{
-											"ignoreCase": false,
-											"left": {
-												"isContext": true,
-												"value": {
-													"simple": "readinesschecklist"
-												}
-											},
-											"operator": "containsGeneral",
-											"right": {
-												"isContext": false,
-												"value": {
-													"simple": "ipsec_tunnel"
-												}
-											},
-											"type": "multiSelect"
-										}
-									]
-								],
-								"height": 53,
-								"id": "3aa90820-66d8-11ef-bcde-9775318adc09",
+								"fieldId": "emailrecipient",
+								"height": 26,
+								"id": "068bfa90-b75a-11ed-b1c8-ebf36972036b",
 								"index": 4,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
 							{
 								"endCol": 2,
-								"fieldId": "dpmpclockdiff",
-								"filters": [
-									[
-										{
-											"ignoreCase": false,
-											"left": {
-												"isContext": true,
-												"value": {
-													"simple": "readinesschecklist"
-												}
-											},
-											"operator": "containsGeneral",
-											"right": {
-												"isContext": false,
-												"value": {
-													"simple": "dp_mp_clock_diff"
-												}
-											},
-											"type": "multiSelect"
-										}
-									]
-								],
-								"height": 53,
-								"id": "102ff380-68fc-11ef-ac49-ed13fc730685",
+								"fieldId": "targetprocessname",
+								"height": 26,
+								"id": "a4917850-b75a-11ed-b1c8-ebf36972036b",
 								"index": 5,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "targetprocesssha256",
+								"height": 26,
+								"id": "a5cb30d0-b75a-11ed-b1c8-ebf36972036b",
+								"index": 6,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "targetprocesscmd",
+								"height": 26,
+								"id": "a6abf3e0-b75a-11ed-b1c8-ebf36972036b",
+								"index": 7,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "filename",
+								"height": 26,
+								"id": "2d64c880-b75b-11ed-b1c8-ebf36972036b",
+								"index": 8,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "filemd5",
+								"height": 26,
+								"id": "30bcf430-b75b-11ed-b1c8-ebf36972036b",
+								"index": 9,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "filesha256",
+								"height": 26,
+								"id": "32744120-b75b-11ed-b1c8-ebf36972036b",
+								"index": 10,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "filepath",
+								"height": 26,
+								"id": "33aa2910-b75b-11ed-b1c8-ebf36972036b",
+								"index": 11,
 								"sectionItemType": "field",
 								"startCol": 0
 							}
@@ -652,55 +1017,139 @@
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
-						"name": "Assurance Test Configuration",
+						"name": "Destination Details",
 						"static": false,
 						"w": 1,
 						"x": 0,
-						"y": 4
+						"y": 3
 					},
 					{
-						"displayType": "CARD",
 						"h": 4,
-						"hideName": false,
-						"i": "caseinfoid-28f0fd86-65f4-4d5f-b44e-082e1975a66f",
+						"i": "qsgvqdodxl-3podiwrjhh-bc5306a0-9fdd-11ed-882b-b559788954b9",
+						"items": [],
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Mapped Fields",
+						"query": "displayMappedFields",
+						"queryType": "script",
+						"static": false,
+						"type": "dynamic",
+						"w": 2,
+						"x": 1,
+						"y": 0
+					},
+					{
+						"h": 3,
+						"i": "qsgvqdodxl-3podiwrjhh-5183f540-ab96-11ed-baee-3d8f7e1bb0df",
 						"items": [
 							{
 								"endCol": 2,
-								"fieldId": "snapshotchecklist",
-								"height": 53,
-								"id": "e4badae3-a763-454c-abec-a5be6402d3fa",
+								"fieldId": "incident_labels",
+								"height": 26,
+								"id": "517b1ba0-ab96-11ed-baee-3d8f7e1bb0df",
+								"index": 0,
+								"isVisible": true,
+								"sectionItemType": "field",
+								"startCol": 0
+							}
+						],
+						"maxW": 3,
+						"minH": 1,
+						"moved": false,
+						"name": "Unmapped fields",
+						"static": false,
+						"type": "labels",
+						"w": 2,
+						"x": 1,
+						"y": 4
+					},
+					{
+						"displayType": "ROW",
+						"h": 3,
+						"hideName": false,
+						"i": "qsgvqdodxl-3podiwrjhh-1b0aaae0-b73f-11ed-977b-dd8e6ac87856",
+						"items": [
+							{
+								"endCol": 2,
+								"fieldId": "hostname",
+								"height": 26,
+								"id": "886de700-b73f-11ed-977b-dd8e6ac87856",
 								"index": 0,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
 							{
 								"endCol": 2,
-								"fieldId": "sessionstatschangethreshold",
-								"filters": [
-									[
-										{
-											"id": 0,
-											"ignoreCase": false,
-											"left": {
-												"isContext": true,
-												"value": {
-													"simple": "snapshotchecklist"
-												}
-											},
-											"operator": "containsGeneral",
-											"right": {
-												"isContext": false,
-												"value": {
-													"simple": "session_stats"
-												}
-											},
-											"type": "multiSelect"
-										}
-									]
-								],
-								"height": 53,
-								"id": "23238567-5068-44bc-b6ae-eb20ad261a5e",
+								"fieldId": "localip",
+								"height": 26,
+								"id": "3608ea50-b73f-11ed-977b-dd8e6ac87856",
 								"index": 1,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "localport",
+								"height": 26,
+								"id": "381423a0-b73f-11ed-977b-dd8e6ac87856",
+								"index": 3,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "username",
+								"height": 26,
+								"id": "9dc24820-b777-11ed-8813-5b758e756634",
+								"index": 4,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "emailsender",
+								"height": 26,
+								"id": "01033340-b75a-11ed-b1c8-ebf36972036b",
+								"index": 5,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "initiatedby",
+								"height": 26,
+								"id": "99158f20-b75a-11ed-b1c8-ebf36972036b",
+								"index": 6,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"dropEffect": "move",
+								"endCol": 2,
+								"fieldId": "initiatormd5",
+								"height": 26,
+								"id": "41fb0430-b75b-11ed-b1c8-ebf36972036b",
+								"index": 7,
+								"listId": "3podiwrjhh-1b0aaae0-b73f-11ed-977b-dd8e6ac87856",
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "initiatorsha256",
+								"height": 26,
+								"id": "9d3306a0-b75a-11ed-b1c8-ebf36972036b",
+								"index": 8,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "initiatorcmd",
+								"height": 26,
+								"id": "9f4a4de0-b75a-11ed-b1c8-ebf36972036b",
+								"index": 9,
 								"sectionItemType": "field",
 								"startCol": 0
 							}
@@ -708,13 +1157,15 @@
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
-						"name": "Assurance Snapshot Configuration",
+						"name": "Source Details",
 						"static": false,
 						"w": 1,
+						"wrapLabels": true,
 						"x": 0,
-						"y": 8
+						"y": 0
 					}
 				],
+				"showEmptyFields": true,
 				"type": "custom"
 			},
 			{
@@ -726,24 +1177,6 @@
 				"id": "workPlan",
 				"name": "Work Plan",
 				"type": "workPlan"
-			},
-			{
-				"hidden": true,
-				"id": "evidenceBoard",
-				"name": "Evidence Board",
-				"type": "evidenceBoard"
-			},
-			{
-				"hidden": true,
-				"id": "relatedIncidents",
-				"name": "Related Incidents",
-				"type": "relatedIncidents"
-			},
-			{
-				"hidden": true,
-				"id": "canvas",
-				"name": "Canvas",
-				"type": "canvas"
 			}
 		]
 	},
@@ -759,191 +1192,10 @@
 					{
 						"fieldId": "incident_type",
 						"isVisible": true
-					},
-					{
-						"fieldId": "incident_panosnetworkoperationsupgradetargetversion",
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_panosnetworkoperationstarget",
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_panosnetworkoperationspanoramainstancename",
-						"isVisible": true
 					}
 				],
 				"isVisible": true,
 				"name": "Basic Information",
-				"query": null,
-				"queryType": "",
-				"readOnly": false,
-				"type": ""
-			},
-			{
-				"description": "",
-				"fields": [
-					{
-						"fieldId": "incident_readinesschecklist",
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_minimumcontentversion",
-						"filters": [
-							[
-								{
-									"left": {
-										"isContext": true,
-										"value": {
-											"simple": "readinesschecklist"
-										}
-									},
-									"operator": "containsGeneral",
-									"right": {
-										"value": {
-											"simple": "content_version"
-										}
-									},
-									"type": "multiSelect"
-								}
-							]
-						],
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_checkarpentryexists",
-						"filters": [
-							[
-								{
-									"left": {
-										"isContext": true,
-										"value": {
-											"simple": "readinesschecklist"
-										}
-									},
-									"operator": "containsGeneral",
-									"right": {
-										"value": {
-											"simple": "arp"
-										}
-									},
-									"type": "multiSelect"
-								}
-							]
-						],
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_checksessionexists",
-						"filters": [
-							[
-								{
-									"left": {
-										"isContext": true,
-										"value": {
-											"simple": "readinesschecklist"
-										}
-									},
-									"operator": "containsGeneral",
-									"right": {
-										"value": {
-											"simple": "session_exist"
-										}
-									},
-									"type": "multiSelect"
-								}
-							]
-						],
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_ipsectunnel",
-						"filters": [
-							[
-								{
-									"left": {
-										"isContext": true,
-										"value": {
-											"simple": "readinesschecklist"
-										}
-									},
-									"operator": "containsGeneral",
-									"right": {
-										"value": {
-											"simple": "ipsec_tunnel"
-										}
-									},
-									"type": "multiSelect"
-								}
-							]
-						],
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_dpmpclockdiff",
-						"filters": [
-							[
-								{
-									"left": {
-										"isContext": true,
-										"value": {
-											"simple": "readinesschecklist"
-										}
-									},
-									"operator": "containsGeneral",
-									"right": {
-										"value": {
-											"simple": "dp_mp_clock_diff"
-										}
-									},
-									"type": "multiSelect"
-								}
-							]
-						],
-						"isVisible": true
-					}
-				],
-				"isVisible": true,
-				"name": "Advanced Test Configuration",
-				"query": null,
-				"queryType": "",
-				"readOnly": false,
-				"type": ""
-			},
-			{
-				"description": "",
-				"fields": [
-					{
-						"fieldId": "incident_snapshotchecklist",
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_sessionstatschangethreshold",
-						"filters": [
-							[
-								{
-									"left": {
-										"isContext": true,
-										"value": {
-											"simple": "snapshotchecklist"
-										}
-									},
-									"operator": "containsGeneral",
-									"right": {
-										"isContext": false,
-										"value": {
-											"simple": "session_stats"
-										}
-									},
-									"type": "multiSelect"
-								}
-							]
-						],
-						"isVisible": true
-					}
-				],
-				"isVisible": true,
-				"name": "Advanced Snapshot Comparison",
 				"query": null,
 				"queryType": "",
 				"readOnly": false,
@@ -956,6 +1208,7 @@
 	"id": "PAN-OS Network Operations - Device Upgrade",
 	"indicatorsDetails": null,
 	"indicatorsQuickView": null,
+	"isOverridable": false,
 	"itemVersion": "",
 	"locked": false,
 	"mobile": null,

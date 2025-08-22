@@ -26,7 +26,7 @@
 							{
 								"endCol": 2,
 								"fieldId": "type",
-								"height": 22,
+								"height": 26,
 								"id": "incident-type-field",
 								"index": 0,
 								"sectionItemType": "field",
@@ -35,7 +35,7 @@
 							{
 								"endCol": 2,
 								"fieldId": "severity",
-								"height": 22,
+								"height": 26,
 								"id": "incident-severity-field",
 								"index": 1,
 								"sectionItemType": "field",
@@ -44,7 +44,7 @@
 							{
 								"endCol": 2,
 								"fieldId": "owner",
-								"height": 22,
+								"height": 26,
 								"id": "incident-owner-field",
 								"index": 2,
 								"sectionItemType": "field",
@@ -53,7 +53,7 @@
 							{
 								"endCol": 2,
 								"fieldId": "description",
-								"height": 22,
+								"height": 26,
 								"id": "084aca00-9b54-11ec-b38a-df4d62d5280f",
 								"index": 3,
 								"sectionItemType": "field",
@@ -62,14 +62,13 @@
 							{
 								"endCol": 2,
 								"fieldId": "devicetags",
-								"height": 22,
+								"height": 26,
 								"id": "21da4470-16a9-11ed-ab3c-5b8eb5d42a0c",
 								"index": 4,
 								"sectionItemType": "field",
 								"startCol": 0
 							}
 						],
-						"maxH": null,
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
@@ -83,7 +82,6 @@
 						"displayType": "ROW",
 						"h": 2,
 						"i": "caseinfoid-6aabad20-98b1-11e9-97d7-ed26ef9e46c8",
-						"maxH": null,
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
@@ -95,42 +93,7 @@
 						"y": 0
 					},
 					{
-						"columns": [
-							{
-								"displayed": true,
-								"isDefault": true,
-								"key": "id",
-								"width": 110
-							},
-							{
-								"displayed": true,
-								"isDefault": true,
-								"key": "name",
-								"width": 300
-							},
-							{
-								"displayed": true,
-								"key": "Description",
-								"width": 200
-							}
-						],
 						"displayType": "ROW",
-						"h": 2,
-						"i": "caseinfoid-770ec200-98b1-11e9-97d7-ed26ef9e46c8",
-						"isVisible": true,
-						"maxH": null,
-						"maxW": 3,
-						"minH": 1,
-						"moved": false,
-						"name": "Running Upgrades or Parent Incident",
-						"static": false,
-						"type": "linkedIncidents",
-						"w": 1,
-						"x": 0,
-						"y": 2
-					},
-					{
-						"displayType": "CARD",
 						"h": 2,
 						"i": "caseinfoid-e54b1770-a0b1-11e9-b27f-13ae1773d289",
 						"isVisible": true,
@@ -151,7 +114,7 @@
 								"fieldId": "panosnetworkoperationsupgradetargetfirewallversion",
 								"height": 53,
 								"id": "8b346430-4da2-11ec-93e7-4db504804573",
-								"index": 1,
+								"index": 0,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
@@ -160,7 +123,7 @@
 								"fieldId": "panosnetworkoperationsupgradepanoramaversion",
 								"height": 53,
 								"id": "4379c850-4d80-11ec-aad9-3b7ece0e895a",
-								"index": 2,
+								"index": 0,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
@@ -169,7 +132,7 @@
 								"fieldId": "panosnetworkoperationsupgradeupgradeversions",
 								"height": 53,
 								"id": "f31a83c0-4cdc-11ec-88b8-25787cc14a5c",
-								"index": 2,
+								"index": 0,
 								"sectionItemType": "field",
 								"startCol": 0
 							},
@@ -179,66 +142,112 @@
 								"fieldId": "panosnetworkoperationsupgradetargetpanoramaversion",
 								"height": 53,
 								"id": "8d750560-4da2-11ec-93e7-4db504804573",
-								"index": 2,
+								"index": 0,
 								"listId": "caseinfoid-e54b1770-a0b1-11e9-b27f-13ae1773d289",
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "checkarpentryexists",
+								"height": 53,
+								"id": "31f2e4e2-21ce-46a9-a90f-7a49d38406e2",
+								"index": 0,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "checksessionexists",
+								"height": 53,
+								"id": "f95c23f4-5ebf-4a4d-9580-dc76b32ebfcb",
+								"index": 1,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "readinesschecklist",
+								"height": 53,
+								"id": "eadc50c5-f75b-4676-8629-521835fef306",
+								"index": 2,
+								"sectionItemType": "field",
+								"startCol": 0
+							},
+							{
+								"endCol": 2,
+								"fieldId": "snapshotchecklist",
+								"height": 26,
+								"id": "8dc83705-7103-47be-bbc9-92a403d55397",
+								"index": 3,
 								"sectionItemType": "field",
 								"startCol": 0
 							}
 						],
-						"maxH": null,
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
-						"name": "Upgrade Information",
+						"name": "Upgrade Settings",
 						"static": false,
 						"w": 1,
 						"x": 2,
 						"y": 0
 					},
 					{
-						"columns": [
+						"displayType": "ROW",
+						"h": 3,
+						"hideName": false,
+						"i": "caseinfoid-52d22890-7a2c-46b5-861e-e124dea48217",
+						"items": [
 							{
-								"displayed": true,
-								"isDefault": true,
-								"key": "value",
-								"width": 300
+								"dropEffect": "move",
+								"endCol": 4,
+								"fieldId": "panosnetworkoperationsxql",
+								"height": 26,
+								"id": "c43223ad-2079-4d4e-b265-42b601161d60",
+								"index": 0,
+								"listId": "caseinfoid-52d22890-7a2c-46b5-861e-e124dea48217",
+								"sectionItemType": "field",
+								"startCol": 0
 							},
 							{
-								"displayed": true,
-								"key": "Hostname",
-								"width": 200
+								"endCol": 4,
+								"fieldId": "panosnetworkoperationstargetngfwsoftware",
+								"height": 26,
+								"id": "8600151e-e466-4937-b094-db81b09aa16e",
+								"index": 1,
+								"sectionItemType": "field",
+								"startCol": 0
 							},
 							{
-								"displayed": true,
-								"key": "IP Address",
-								"width": 200
+								"endCol": 4,
+								"fieldId": "panosnetworkoperationstargetpanoramasoftware",
+								"height": 26,
+								"id": "b0c8459c-439e-496c-b8d3-b76c1bc528a3",
+								"index": 2,
+								"sectionItemType": "field",
+								"startCol": 0
 							},
 							{
-								"displayed": true,
-								"key": "HA Status",
-								"width": 200
-							},
-							{
-								"displayed": true,
-								"key": "Software Version",
-								"width": 200
+								"dropEffect": "move",
+								"endCol": 4,
+								"fieldId": "panosnetworkoperationsautomaticupgrade",
+								"height": 26,
+								"id": "d7d3aac9-6b8b-4bfc-bd50-d4ef9ac066f1",
+								"index": 3,
+								"listId": "caseinfoid-52d22890-7a2c-46b5-861e-e124dea48217",
+								"sectionItemType": "field",
+								"startCol": 0
 							}
 						],
-						"description": "",
-						"h": 2,
-						"i": "caseinfoid-36b83780-16a9-11ed-ab3c-5b8eb5d42a0c",
-						"items": [],
-						"maxH": null,
 						"maxW": 3,
 						"minH": 1,
 						"moved": false,
-						"name": "Devices To Be Upgraded",
-						"query": "type:\"Panorama Device\" or type:\"Network Device\"",
-						"queryType": "input",
+						"name": "Upgrade Details",
 						"static": false,
-						"type": "indicators",
-						"w": 2,
-						"x": 1,
+						"w": 3,
+						"wrapLabels": true,
+						"x": 0,
 						"y": 2
 					}
 				],
@@ -286,10 +295,6 @@
 					{
 						"fieldId": "incident_type",
 						"isVisible": true
-					},
-					{
-						"fieldId": "incident_panosnetworkoperationspanoramainstance",
-						"isVisible": true
 					}
 				],
 				"isVisible": true,
@@ -301,16 +306,6 @@
 			},
 			{
 				"description": "Which devices should be upgraded. Devices can be selected by their Tags, or any valid TIM query that returns device indicators. You can test the query, and view the available device tags, on the [Threat Intel Page](/#/indicators).",
-				"fields": [
-					{
-						"fieldId": "incident_devicetags",
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_panosnetworkoperationsdeviceupgradequery",
-						"isVisible": true
-					}
-				],
 				"isVisible": true,
 				"name": "Device Targets",
 				"query": null,
@@ -320,16 +315,6 @@
 			},
 			{
 				"description": "The PAN-OS software versions to upgrade the environment to. If not provided, you will be prompted to select the correct version based on the available software images.\n\nIf provided, the playbook will not prompt for the upgrade versions, useful if this is being run as a job.",
-				"fields": [
-					{
-						"fieldId": "incident_panosnetworkoperationsupgradetargetfirewallversion",
-						"isVisible": true
-					},
-					{
-						"fieldId": "incident_panosnetworkoperationsupgradetargetpanoramaversion",
-						"isVisible": true
-					}
-				],
 				"isVisible": true,
 				"name": "Target Versions",
 				"query": null,
@@ -339,12 +324,6 @@
 			},
 			{
 				"description": "### Warning\n\nThis Switch will automatically start the entire upgrade process for all the devices captured by this upgrade incident. This includes potentially impacting High-Availability operations and system restarts.\n\nMake sure you know what you're doing if you select it!",
-				"fields": [
-					{
-						"fieldId": "incident_panosnetworkoperationsautomaticupgradeswitch",
-						"isVisible": true
-					}
-				],
 				"isVisible": true,
 				"name": "Enable Automatic Upgrades",
 				"query": null,
@@ -359,12 +338,16 @@
 	"id": "PAN-OS Network Operations - Batch Upgrade",
 	"indicatorsDetails": null,
 	"indicatorsQuickView": null,
+	"isOverridable": false,
 	"itemVersion": "",
 	"locked": false,
 	"mobile": null,
 	"name": "PAN-OS Network Operations - Batch Upgrade",
 	"packID": "",
 	"packName": "",
+	"propagationLabels": [
+		"all"
+	],
 	"quickView": null,
 	"quickViewV2": null,
 	"system": false,
