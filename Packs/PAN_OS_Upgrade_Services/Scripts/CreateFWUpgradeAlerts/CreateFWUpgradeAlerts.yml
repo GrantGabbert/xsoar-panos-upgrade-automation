@@ -1,46 +1,47 @@
-commonfields:
-  id: 18cba853-99bd-463e-82c9-6156066b8128
-  version: 75
-vcShouldKeepItemLegacyProdMachine: false
-name: CreateFWUpgradeAlerts
-script: ''
-type: python
-tags: []
-comment: Uses the core-api generic POST integration command to create upgrade alerts for each device.
-enabled: true
 args:
-- name: TargetDevices
+- description: List of target device serial numbers to be upgraded
+  isArray: true
+  name: TargetDevices
   required: true
-  description: List of target device serial numbers to be upgraded
-- name: TargetVersion
+- description: Target software version for the upgrades
+  name: TargetVersion
   required: true
-  description: Target software version for the upgrades
-- name: DeviceType
-  auto: PREDEFINED
+- auto: PREDEFINED
+  defaultValue: NGFW
+  name: DeviceType
   predefined:
   - NGFW
   - Panorama
-  defaultValue: NGFW
-- name: Playbook
-  default: true
-  description: The name of the playbook to run on the created alerts, defaults to "PAN-OS Network Operations - Device Upgrade"
+- default: true
   defaultValue: PAN-OS Network Operations - Device Upgrade
-- name: Domain
-  description: The domain to create the incident/alert in.  If not set, then the domain on the calling alert will be used
-- name: Auto
+  description: The name of the playbook to run on the created alerts, defaults to "PAN-OS Network Operations - Device Upgrade"
+  name: Playbook
+- description: The domain to create the incident/alert in.  If not set, then the domain on the calling alert will be used
+  name: Domain
+- defaultValue: 'false'
   description: This determines if the alerts are to be auto-started.
-  defaultValue: 'false'
-outputs:
-- contextPath: CreatedAlertIDs
-  type: unknown
-scripttarget: 0
-subtype: python3
+  name: Auto
+comment: Uses the core-api generic POST integration command to create upgrade alerts for each device.
+commonfields:
+  id: CreateFWUpgradeAlerts
+  version: -1
 dependson:
   must:
   - Core REST API|||core-api-post
-pswd: ''
-runonce: false
 dockerimage: demisto/python3:3.12.8.1983910
-runas: DBotWeakRole
+enabled: true
 engineinfo: {}
 mainengineinfo: {}
+name: CreateFWUpgradeAlerts
+outputs:
+- contextPath: CreatedAlertIDs
+  type: unknown
+pswd: ''
+runas: DBotWeakRole
+runonce: false
+script: ''
+scripttarget: 0
+subtype: python3
+tags: []
+timeout: 20m0s
+type: python

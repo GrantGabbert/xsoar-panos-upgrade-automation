@@ -1,6 +1,11 @@
 import demistomock as demisto  # noqa: F401
 from CommonServerPython import *  # noqa: F401
 
+import signal
+import json
+import re
+import time
+
 XQL = 'panosnetworkoperationsxql'
 TARGET_FW = 'panosnetworkoperationstargetngfwsoftware'
 TARGET_PAN = 'panosnetworkoperationstargetpanoramasoftware'
@@ -11,6 +16,24 @@ TARGET_PAN_WR = 'pan_os_network_operations_target_panorama_software'
 AUTO_UP_WR = 'pan_os_network_operations_automatic_upgrade'
 XQL_WR = 'pan_os_network_operations_xql'
 
+# we need to have this retry wrapper, since we commonly have issues with XSIAM api calls failing.
+def execute_command_with_retries(command, args, extract_contents=True, retries=3):
+    errors = ""
+
+    for attempt in range(retries):
+        try:
+            res = execute_command(command, args, extract_contents=extract_contents)
+            demisto.debug(f'Attempt {attempt + 1}/{retries} successful: "{command}"')
+            break
+
+        except Exception as e:
+            errors += str(e)
+            demisto.debug(f'Attempt {attempt + 1}/{retries} failed: "{command}" Error: {e}')
+            time.sleep(2 ** attempt)
+    else:
+        raise DemistoException(f'All {retries} attempts to execute "{command}" have failed. errors: {errors}')
+
+    return res
 
 def create_xql_for_serial(base_xql:str, serial:str) -> str:
     '''
@@ -87,12 +110,12 @@ def main():
 
     # convert devices into list
     devlist = []
-    if ',' in devices and '[' in devices:
+    if isinstance(devices, str) and ',' in devices and '[' in devices:
         devlist = json.loads(devices)
-    elif ',' in devices:
+    elif isinstance(devices, str) and ',' in devices:
         devlist = devices.split(',')
     else:
-        devlist.append(devices)
+        devlist.extend(argToList(devices))
 
     # create alerts
     ext_ids = []
@@ -102,11 +125,13 @@ def main():
         alert_data = create_alert_dict(serial=dev, xql=currentXql, incident=incident, domain=domain, pbid=pbid, ver=version, auto=auto_up, devtype=devtype)
 
         # create alert
-        result = execute_command('core-api-post', args={'uri': '/public_api/v1/alerts/create_alert', 'body': json.dumps(alert_data)})
+        result = execute_command_with_retries('core-api-post', args={'uri': '/public_api/v1/alerts/create_alert', 'body': json.dumps(alert_data), 'timeout': 1})
 
         # add external id to list
         extid = result.get('response').get('reply')
         ext_ids.append(extid)
+
+    demisto.debug(f'created external ids: {ext_ids}')
 
     # The create alerts API returns external IDs, so find the internal IDs
     ext_query_filter = {
@@ -121,32 +146,29 @@ def main():
             }
         }
 
-    # query for internal ids
-    get_alerts_response = execute_command("core-api-post", {"uri": "/public_api/v1/alerts/get_alerts","body": ext_query_filter})
-
     # sometimes it takes a bit for the alerts to be queriable
     time.sleep(30)
-    query_count = get_alerts_response.get('response', {}).get('reply', {}).get('result_count')
 
-    attempts=3
-    while query_count < len(ext_ids) and attempts > 0:
-        time.sleep(30)
-        attempts-=1
-        get_alerts_response = execute_command("core-api-post", {"uri": "/public_api/v1/alerts/get_alerts","body": ext_query_filter})
-        query_count = get_alerts_response.get('response', {}).get('reply', {}).get('result_count')
+    # query for internal ids
+    get_alerts_response = execute_command_with_retries('core-api-post', {'uri': '/public_api/v2/alerts/get_alerts_multi_events', 'body': json.dumps(ext_query_filter), 'timeout': 3})
 
+    demisto.debug(f'response from get alerts: {get_alerts_response}')
+
+    # get the alert ids for outputs
     alert_ids = []
     for aid in get_alerts_response.get('response').get('reply').get('alerts'):
         alert_ids.append(aid.get('alert_id'))
 
+    demisto.debug(f'Output devtype: {devtype}, alert_ids: {alert_ids}')
+
     return_results(
         CommandResults(
-            outputs_prefix='CreatedAlertIDs',
-            outputs_key_field='',
+            outputs_prefix=f'CreatedAlertIDs',
             outputs={devtype: alert_ids}
         )
     )
 
 if __name__ in ('__main__', '__builtin__', 'builtins'):
     main()
+
 
